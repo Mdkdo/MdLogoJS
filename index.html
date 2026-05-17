@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logo JS Interpreter</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -18,9 +19,25 @@
             </div>
             <div class="controls">
                 <div class="editor-section">
+                    <div class="toolbar file-toolbar">
+                        <button id="newFileBtn" title="Nouveau"><i class="fas fa-file"></i></button>
+                        <button id="openFileBtn" title="Ouvrir"><i class="fas fa-folder-open"></i></button>
+                        <button id="saveFileBtn" title="Enregistrer"><i class="fas fa-save"></i></button>
+                        <button id="themeToggleBtn" title="Mode Sombre/Clair"><i class="fas fa-moon"></i></button>
+                        <button id="settingsBtn" title="Paramètres"><i class="fas fa-cog"></i></button>
+                        <a href="help.html" target="_blank" class="help-link-icon" title="Aide"><i class="fas fa-question-circle"></i></a>
+                    </div>
+                    <div class="toolbar edit-toolbar">
+                        <button id="selectAllBtn" title="Sélectionner tout"><i class="fas fa-expand"></i></button>
+                        <button id="copyBtn" title="Copier"><i class="fas fa-copy"></i></button>
+                        <button id="cutBtn" title="Couper"><i class="fas fa-cut"></i></button>
+                        <button id="pasteBtn" title="Coller"><i class="fas fa-paste"></i></button>
+                        <button id="commentBtn" title="Commenter/Décommenter"><i class="fas fa-comment-slash"></i></button>
+                        <button id="indentBtn" title="Augmenter l'indentation"><i class="fas fa-indent"></i></button>
+                        <button id="unindentBtn" title="Réduire l'indentation"><i class="fas fa-outdent"></i></button>
+                    </div>
                     <div class="editor-header">
                         <h3>Code JavaScript</h3>
-                        <a href="help.html" target="_blank" class="help-link">Aide & Commandes</a>
                     </div>
                     <textarea id="codeEditor" spellcheck="false">repeat(4, () => {
   fd(100);

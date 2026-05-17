@@ -17,6 +17,7 @@ class Turtle {
         this.width = 1;
         this.visible = true;
         this.fontName = '12px Arial';
+        this.turtleImage = null;
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.beginPath();
@@ -170,6 +171,20 @@ class Turtle {
         this.fontName = style;
     }
 
+    setTurtleImage(url) {
+        if (!url) {
+            this.turtleImage = null;
+            this.draw();
+            return;
+        }
+        const img = new Image();
+        img.onload = () => {
+            this.turtleImage = img;
+            this.draw();
+        };
+        img.src = url;
+    }
+
     setxy(x, y) {
         this.x = x;
         this.y = y;
@@ -236,17 +251,22 @@ class Turtle {
         this.turtleCtx.translate(this.x, this.y);
         this.turtleCtx.rotate(this.angle + Math.PI / 2);
 
-        this.turtleCtx.beginPath();
-        this.turtleCtx.moveTo(0, -10);
-        this.turtleCtx.lineTo(7, 10);
-        this.turtleCtx.lineTo(-7, 10);
-        this.turtleCtx.closePath();
+        if (this.turtleImage) {
+            const size = 30;
+            this.turtleCtx.drawImage(this.turtleImage, -size/2, -size/2, size, size);
+        } else {
+            this.turtleCtx.beginPath();
+            this.turtleCtx.moveTo(0, -10);
+            this.turtleCtx.lineTo(7, 10);
+            this.turtleCtx.lineTo(-7, 10);
+            this.turtleCtx.closePath();
 
-        this.turtleCtx.fillStyle = 'green';
-        this.turtleCtx.fill();
-        this.turtleCtx.strokeStyle = 'black';
-        this.turtleCtx.lineWidth = 1;
-        this.turtleCtx.stroke();
+            this.turtleCtx.fillStyle = 'green';
+            this.turtleCtx.fill();
+            this.turtleCtx.strokeStyle = 'black';
+            this.turtleCtx.lineWidth = 1;
+            this.turtleCtx.stroke();
+        }
 
         this.turtleCtx.restore();
     }
