@@ -14,6 +14,7 @@
         <main>
             <div class="canvas-area">
                 <canvas id="turtleCanvas" width="600" height="600"></canvas>
+                <canvas id="turtleLayer" width="600" height="600"></canvas>
             </div>
             <div class="controls">
                 <div class="editor-section">
@@ -29,18 +30,43 @@
                 </div>
                 <div class="help-section">
                     <h3>Aide & Commandes</h3>
-                    <ul>
-                        <li><code>fd(n)</code> : Avancer de n</li>
-                        <li><code>bk(n)</code> : Reculer de n</li>
-                        <li><code>rt(deg)</code> : Tourner à droite</li>
-                        <li><code>lt(deg)</code> : Tourner à gauche</li>
-                        <li><code>pu()</code> : Lever le stylo</li>
-                        <li><code>pd()</code> : Baisser le stylo</li>
-                        <li><code>cs()</code> : Effacer l'écran</li>
-                        <li><code>repeat(n, fn)</code> : Répéter n fois</li>
-                        <li><code>setcolor(c)</code> : Couleur (ex: 'red')</li>
-                        <li><code>setwidth(w)</code> : Épaisseur du trait</li>
-                    </ul>
+                    <div class="help-grid">
+                        <div>
+                            <h4>Mouvement</h4>
+                            <ul>
+                                <li><code>fd(n)</code>, <code>bk(n)</code></li>
+                                <li><code>rt(deg)</code>, <code>lt(deg)</code></li>
+                                <li><code>setxy(x, y)</code></li>
+                                <li><code>setheading(deg)</code></li>
+                                <li><code>home()</code></li>
+                            </ul>
+                            <h4>Stylo & Apparence</h4>
+                            <ul>
+                                <li><code>pu()</code>, <code>pd()</code></li>
+                                <li><code>pencolor(c)</code>, <code>fillcolor(c)</code></li>
+                                <li><code>setwidth(w)</code></li>
+                                <li><code>fill()</code>, <code>cs()</code></li>
+                                <li><code>ht()</code>, <code>st()</code></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>Formes</h4>
+                            <ul>
+                                <li><code>circle(r)</code>, <code>arc(deg, r)</code></li>
+                                <li><code>rectangle(w, h)</code></li>
+                                <li><code>ellipse(w, h)</code></li>
+                                <li><code>line(x1, y1, x2, y2)</code></li>
+                                <li><code>write("texte")</code></li>
+                            </ul>
+                            <h4>Math & Divers</h4>
+                            <ul>
+                                <li><code>sin(d)</code>, <code>cos(d)</code>, <code>pi</code></li>
+                                <li><code>random(n)</code>, <code>rgb(r,g,b)</code></li>
+                                <li><code>repeat(n, () => { ... })</code></li>
+                                <li><code>posx()</code>, <code>posy()</code>, <code>heading()</code></li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="examples">
                         <h4>Exemples :</h4>
                         <button class="example-btn" data-code="repeat(36, () => {
@@ -58,7 +84,14 @@ repeat(18, () => {
     rt(90);
   });
   rt(20);
-});">Fleur de carrés</button>
+});">Fleur</button>
+                        <button class="example-btn" data-code="cs();
+fillcolor('yellow');
+repeat(36, (i) => {
+  fd(100);
+  rt(145);
+});
+fill();">Étoile remplie</button>
                     </div>
                 </div>
             </div>

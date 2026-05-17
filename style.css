@@ -34,11 +34,25 @@ main {
     border-radius: 8px;
     overflow: hidden;
     line-height: 0;
+    position: relative;
+    width: 600px;
+    height: 600px;
 }
 
 canvas {
-    background-color: #fff;
+    background-color: transparent;
     display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#turtleCanvas {
+    background-color: #fff;
+}
+
+#turtleLayer {
+    pointer-events: none;
 }
 
 .controls {
@@ -54,6 +68,17 @@ canvas {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.help-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+h4 {
+    margin-bottom: 5px;
+    color: #2980b9;
 }
 
 h3 {
