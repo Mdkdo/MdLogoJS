@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo JS Interpreter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interpréteur Logo JavaScript</h1>
+        </header>
+        <main>
+            <div class="canvas-area">
+                <canvas id="turtleCanvas" width="600" height="600"></canvas>
+            </div>
+            <div class="controls">
+                <div class="editor-section">
+                    <h3>Code JavaScript</h3>
+                    <textarea id="codeEditor" spellcheck="false">repeat(4, () => {
+  fd(100);
+  rt(90);
+});</textarea>
+                    <div class="buttons">
+                        <button id="runBtn" class="primary">Exécuter</button>
+                        <button id="clearBtn">Effacer</button>
+                    </div>
+                </div>
+                <div class="help-section">
+                    <h3>Aide & Commandes</h3>
+                    <ul>
+                        <li><code>fd(n)</code> : Avancer de n</li>
+                        <li><code>bk(n)</code> : Reculer de n</li>
+                        <li><code>rt(deg)</code> : Tourner à droite</li>
+                        <li><code>lt(deg)</code> : Tourner à gauche</li>
+                        <li><code>pu()</code> : Lever le stylo</li>
+                        <li><code>pd()</code> : Baisser le stylo</li>
+                        <li><code>cs()</code> : Effacer l'écran</li>
+                        <li><code>repeat(n, fn)</code> : Répéter n fois</li>
+                        <li><code>setcolor(c)</code> : Couleur (ex: 'red')</li>
+                        <li><code>setwidth(w)</code> : Épaisseur du trait</li>
+                    </ul>
+                    <div class="examples">
+                        <h4>Exemples :</h4>
+                        <button class="example-btn" data-code="repeat(36, () => {
+  fd(50);
+  rt(10);
+});">Cercle</button>
+                        <button class="example-btn" data-code="for(let i=0; i<100; i++) {
+  fd(i*2);
+  rt(91);
+}">Spirale</button>
+                        <button class="example-btn" data-code="setcolor('purple');
+repeat(18, () => {
+  repeat(4, () => {
+    fd(100);
+    rt(90);
+  });
+  rt(20);
+});">Fleur de carrés</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="turtle.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
