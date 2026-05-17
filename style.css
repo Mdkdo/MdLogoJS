@@ -9,12 +9,13 @@
     --primary-hover: #2980b9;
     --shadow: 0 4px 6px rgba(0,0,0,0.1);
     /* Syntax Highlighting Light */
-    --hl-keyword: #d73a49;
-    --hl-command: #005cc5;
-    --hl-string: #032f62;
-    --hl-number: #005cc5;
-    --hl-comment: #6a737d;
-    --hl-function: #6f42c1;
+    --hl-keyword: #0000ff; /* Bleu */
+    --hl-command: #00008b; /* Bleu foncé */
+    --hl-string: #008000; /* Vert */
+    --hl-number: #808080; /* Gris */
+    --hl-comment: #a52a2a; /* Marron */
+    --hl-operator: #ff0000; /* Rouge */
+    --hl-unknown: #87ceeb; /* Bleu ciel */
 }
 
 body.dark-mode {
@@ -24,13 +25,14 @@ body.dark-mode {
     --border-color: #444;
     --btn-bg: #3d3d3d;
     --btn-hover: #555;
-    /* Syntax Highlighting Dark */
-    --hl-keyword: #f97583;
-    --hl-command: #79c0ff;
-    --hl-string: #9ecbff;
-    --hl-number: #79c0ff;
-    --hl-comment: #8b949e;
-    --hl-function: #b392f0;
+    /* Syntax Highlighting Dark (Inverted/Adjusted for visibility) */
+    --hl-keyword: #569cd6; /* Bleu clair */
+    --hl-command: #4fc1ff; /* Bleu plus clair */
+    --hl-string: #6a9955; /* Vert plus clair */
+    --hl-number: #b5cea8; /* Gris clair/vert */
+    --hl-comment: #ce9178; /* Marron clair */
+    --hl-operator: #f44747; /* Rouge clair */
+    --hl-unknown: #9cdcfe; /* Bleu ciel clair */
 }
 
 body {
@@ -188,15 +190,20 @@ h3 {
 #highlighting-content {
     font-family: inherit;
     font-size: inherit;
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+    font-weight: normal;
 }
 
 /* Token Styles */
 .hl-keyword { color: var(--hl-keyword); font-weight: bold; }
 .hl-command { color: var(--hl-command); }
-.hl-function { color: var(--hl-function); }
 .hl-string { color: var(--hl-string); }
 .hl-number { color: var(--hl-number); }
 .hl-comment { color: var(--hl-comment); font-style: italic; }
+.hl-operator { color: var(--hl-operator); }
+.hl-unknown { color: var(--hl-unknown); }
 
 .buttons {
     margin-top: 10px;

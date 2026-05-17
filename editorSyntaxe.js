@@ -16,18 +16,20 @@ function updateHighlight() {
     ];
 
     const combinedRegex = new RegExp(
-        '(\\/\/.*|\\/\\*[\\s\\S]*?\\*\\/)|' + // Comments
-        '("(?:[^"\\\\\\n]|\\\\.)*"|\'(?:[^\'\\\\\\n]|\\\\.)*\'|`(?:[^\\\\`]|\\\\.)*`)|' + // Strings
-        '(\\b\\d+(?:\\.\\d+)?\\b)|' + // Numbers
-        '(\\b(?:' + keywords.join('|') + ')\\b)|' + // Keywords
-        '(\\b(?:' + commands.join('|') + ')\\b)', // Commands
+        '(\\/\/.*|\\/\\*[\\s\\S]*?\\*\\/)|' + // 1. Comments
+        '("(?:[^"\\\\\\n]|\\\\.)*"|\'(?:[^\'\\\\\\n]|\\\\.)*\'|`(?:[^\\\\`]|\\\\.)*`)|' + // 2. Strings
+        '(\\b\\d+(?:\\.\\d+)?\\b)|' + // 3. Numbers
+        '(\\b(?:' + keywords.join('|') + ')\\b)|' + // 4. Keywords
+        '(\\b(?:' + commands.join('|') + ')\\b)|' + // 5. Commands
+        '([\\+\\-\\*/\\(\\),\\;\\[\\]\\{\\}\\.])|' + // 6. Operators
+        '(\\b[a-zA-Z_$][a-zA-Z0-9_$]*\\b)', // 7. Identifiers (Unknown)
         'g'
     );
 
     let highlighted = '';
     let lastIndex = 0;
 
-    code.replace(combinedRegex, (match, comment, string, number, keyword, command, offset) => {
+    code.replace(combinedRegex, (match, comment, string, number, keyword, command, operator, unknown, offset) => {
         // Add text before the match
         highlighted += code.substring(lastIndex, offset)
             .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -42,8 +44,10 @@ function updateHighlight() {
             highlighted += `<span class="hl-keyword">${keyword}</span>`;
         } else if (command) {
             highlighted += `<span class="hl-command">${command}</span>`;
-        } else {
-            highlighted += match.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        } else if (operator) {
+            highlighted += `<span class="hl-operator">${operator.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>`;
+        } else if (unknown) {
+            highlighted += `<span class="hl-unknown">${unknown}</span>`;
         }
 
         lastIndex = offset + match.length;
