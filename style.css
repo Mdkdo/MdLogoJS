@@ -8,6 +8,13 @@
     --primary-color: #3498db;
     --primary-hover: #2980b9;
     --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    /* Syntax Highlighting Light */
+    --hl-keyword: #d73a49;
+    --hl-command: #005cc5;
+    --hl-string: #032f62;
+    --hl-number: #005cc5;
+    --hl-comment: #6a737d;
+    --hl-function: #6f42c1;
 }
 
 body.dark-mode {
@@ -17,6 +24,13 @@ body.dark-mode {
     --border-color: #444;
     --btn-bg: #3d3d3d;
     --btn-hover: #555;
+    /* Syntax Highlighting Dark */
+    --hl-keyword: #f97583;
+    --hl-command: #79c0ff;
+    --hl-string: #9ecbff;
+    --hl-number: #79c0ff;
+    --hl-comment: #8b949e;
+    --hl-function: #b392f0;
 }
 
 body {
@@ -129,19 +143,60 @@ h3 {
     padding-bottom: 10px;
 }
 
-textarea {
+#editor-container {
+    position: relative;
     width: 100%;
     height: 250px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
-    padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
+    overflow: hidden;
     background-color: var(--panel-bg);
-    color: var(--text-color);
-    resize: vertical;
-    box-sizing: border-box;
 }
+
+#codeEditor, #highlighting {
+    margin: 0;
+    padding: 10px;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    tab-size: 2;
+    box-sizing: border-box;
+    white-space: pre;
+    word-wrap: normal;
+    overflow: auto;
+}
+
+#codeEditor {
+    z-index: 1;
+    color: transparent;
+    background: transparent;
+    caret-color: var(--text-color);
+    resize: none;
+}
+
+#highlighting {
+    z-index: 0;
+    pointer-events: none;
+}
+
+#highlighting-content {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* Token Styles */
+.hl-keyword { color: var(--hl-keyword); font-weight: bold; }
+.hl-command { color: var(--hl-command); }
+.hl-function { color: var(--hl-function); }
+.hl-string { color: var(--hl-string); }
+.hl-number { color: var(--hl-number); }
+.hl-comment { color: var(--hl-comment); font-style: italic; }
 
 .buttons {
     margin-top: 10px;

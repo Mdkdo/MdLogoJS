@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const reader = new FileReader();
             reader.onload = (event) => {
                 codeEditor.value = event.target.result;
+                updateHighlight();
             };
             reader.readAsText(file);
         };
@@ -106,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.clipboard.writeText(selectedText);
             codeEditor.value = text.substring(0, start) + text.substring(end);
             codeEditor.selectionStart = codeEditor.selectionEnd = start;
+            updateHighlight();
         }
         codeEditor.focus();
     });
@@ -118,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const clipboardText = await navigator.clipboard.readText();
             codeEditor.value = text.substring(0, start) + clipboardText + text.substring(end);
             codeEditor.selectionStart = codeEditor.selectionEnd = start + clipboardText.length;
+            updateHighlight();
         } catch (err) {
             console.error('Failed to read clipboard:', err);
         }
@@ -146,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return line;
         });
         codeEditor.value = newLines.join('\n');
+        updateHighlight();
         codeEditor.focus();
     });
 
@@ -167,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return line;
         });
         codeEditor.value = newLines.join('\n');
+        updateHighlight();
         codeEditor.focus();
     });
 
@@ -188,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return line;
         });
         codeEditor.value = newLines.join('\n');
+        updateHighlight();
         codeEditor.focus();
     });
 
@@ -200,11 +206,16 @@ document.addEventListener('DOMContentLoaded', () => {
     exampleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             codeEditor.value = btn.getAttribute('data-code');
+            updateHighlight();
             turtle.reset();
             runCode();
         });
     });
 
+    codeEditor.addEventListener('input', updateHighlight);
+    codeEditor.addEventListener('scroll', syncScroll);
+
     // Initial run
+    updateHighlight();
     runCode();
 });

@@ -39,10 +39,13 @@
                     <div class="editor-header">
                         <h3>Code JavaScript</h3>
                     </div>
-                    <textarea id="codeEditor" spellcheck="false">repeat(4, () => {
+                    <div id="editor-container">
+                        <textarea id="codeEditor" spellcheck="false">repeat(4, () => {
   fd(100);
   rt(90);
 });</textarea>
+                        <pre id="highlighting" aria-hidden="true"><code id="highlighting-content"></code></pre>
+                    </div>
                     <div class="buttons">
                         <button id="runBtn" class="primary">Exécuter</button>
                         <button id="clearBtn">Effacer</button>
