@@ -3,9 +3,6 @@ function updateHighlight() {
     const highlighting = document.getElementById('highlighting-content');
     let code = codeEditor.value;
 
-    // Entity escape
-    code = code.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-
     // Tokens definition
     const keywords = ["const", "let", "var", "if", "else", "for", "while", "function", "return", "new", "try", "catch"];
     const commands = [
@@ -27,14 +24,34 @@ function updateHighlight() {
         'g'
     );
 
-    let highlighted = code.replace(combinedRegex, (match, comment, string, number, keyword, command) => {
-        if (comment) return `<span class="hl-comment">${comment}</span>`;
-        if (string) return `<span class="hl-string">${string}</span>`;
-        if (number) return `<span class="hl-number">${number}</span>`;
-        if (keyword) return `<span class="hl-keyword">${keyword}</span>`;
-        if (command) return `<span class="hl-command">${command}</span>`;
+    let highlighted = '';
+    let lastIndex = 0;
+
+    code.replace(combinedRegex, (match, comment, string, number, keyword, command, offset) => {
+        // Add text before the match
+        highlighted += code.substring(lastIndex, offset)
+            .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        if (comment) {
+            highlighted += `<span class="hl-comment">${comment.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>`;
+        } else if (string) {
+            highlighted += `<span class="hl-string">${string.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>`;
+        } else if (number) {
+            highlighted += `<span class="hl-number">${number}</span>`;
+        } else if (keyword) {
+            highlighted += `<span class="hl-keyword">${keyword}</span>`;
+        } else if (command) {
+            highlighted += `<span class="hl-command">${command}</span>`;
+        } else {
+            highlighted += match.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        lastIndex = offset + match.length;
         return match;
     });
+
+    // Add remaining text
+    highlighted += code.substring(lastIndex).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
     highlighting.innerHTML = highlighted + (code.endsWith('\n') ? ' ' : '');
 };
