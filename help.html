@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aide & Commandes - Logo JS</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { padding: 40px; }
+        .help-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        .back-link { display: block; margin-bottom: 20px; color: #3498db; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="help-container">
+        <a href="index.html" class="back-link">← Retour à l'interpréteur</a>
+        <h1>Aide & Commandes</h1>
+        <div class="help-grid">
+            <div>
+                <h4>Mouvement</h4>
+                <ul>
+                    <li><code>fd(n)</code> : Avancer de n pas</li>
+                    <li><code>bk(n)</code> : Reculer de n pas</li>
+                    <li><code>rt(deg)</code> : Tourner à droite de n degrés</li>
+                    <li><code>lt(deg)</code> : Tourner à gauche de n degrés</li>
+                    <li><code>setxy(x, y)</code> : Placer la tortue aux coordonnées x, y</li>
+                    <li><code>setheading(deg)</code> : Orienter la tortue (0 = haut)</li>
+                    <li><code>home()</code> : Ramener la tortue au centre</li>
+                </ul>
+                <h4>Stylo & Apparence</h4>
+                <ul>
+                    <li><code>pu()</code> : Lever le crayon</li>
+                    <li><code>pd()</code> : Baisser le crayon</li>
+                    <li><code>pencolor(c)</code> : Changer la couleur du crayon</li>
+                    <li><code>fillcolor(c)</code> : Changer la couleur de remplissage</li>
+                    <li><code>setwidth(w)</code> : Fixer l'épaisseur du crayon</li>
+                    <li><code>fill()</code> : Remplir la forme actuelle</li>
+                    <li><code>cs()</code> : Vide l'écran et réinitialise la tortue</li>
+                    <li><code>clean()</code> : Efface le dessin sans bouger la tortue</li>
+                    <li><code>ht()</code>, <code>st()</code> : Cacher/Montrer la tortue</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Formes</h4>
+                <ul>
+                    <li><code>circle(r)</code> : Tracer un cercle de rayon r</li>
+                    <li><code>arc(deg, r)</code> : Tracer un arc de cercle</li>
+                    <li><code>rectangle(w, h)</code> : Tracer un rectangle</li>
+                    <li><code>ellipse(w, h)</code> : Tracer une ellipse</li>
+                    <li><code>line(x1, y1, x2, y2)</code> : Tracer une ligne entre deux points</li>
+                    <li><code>write("texte")</code> : Afficher du texte</li>
+                </ul>
+                <h4>Math & Divers</h4>
+                <ul>
+                    <li><code>sin(d)</code>, <code>cos(d)</code>, <code>tan(d)</code>, <code>atan(y, x)</code></li>
+                    <li><code>sqrt(n)</code>, <code>pow(a, b)</code>, <code>pi</code></li>
+                    <li><code>random(n)</code> : Nombre aléatoire entre 0 et n</li>
+                    <li><code>rgb(r, g, b)</code> : Créer une couleur</li>
+                    <li><code>repeat(n, () => { ... })</code> : Répéter n fois</li>
+                    <li><code>posx()</code>, <code>posy()</code>, <code>heading()</code></li>
+                    <li><code>distance(x, y)</code>, <code>towards(x, y)</code></li>
+                </ul>
+                <h4>Média</h4>
+                <ul>
+                    <li><code>playsound(url)</code> : Jouer un son</li>
+                    <li><code>showimage(url, x, y, w, h)</code> : Afficher une image</li>
+                    <li><code>showvideo(url, x, y, w, h)</code> : Afficher une vidéo</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

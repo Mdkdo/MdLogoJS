@@ -18,7 +18,10 @@
             </div>
             <div class="controls">
                 <div class="editor-section">
-                    <h3>Code JavaScript</h3>
+                    <div class="editor-header">
+                        <h3>Code JavaScript</h3>
+                        <a href="help.html" target="_blank" class="help-link">Aide & Commandes</a>
+                    </div>
                     <textarea id="codeEditor" spellcheck="false">repeat(4, () => {
   fd(100);
   rt(90);
@@ -28,47 +31,9 @@
                         <button id="clearBtn">Effacer</button>
                     </div>
                 </div>
-                <div class="help-section">
-                    <h3>Aide & Commandes</h3>
-                    <div class="help-grid">
-                        <div>
-                            <h4>Mouvement</h4>
-                            <ul>
-                                <li><code>fd(n)</code>, <code>bk(n)</code></li>
-                                <li><code>rt(deg)</code>, <code>lt(deg)</code></li>
-                                <li><code>setxy(x, y)</code></li>
-                                <li><code>setheading(deg)</code></li>
-                                <li><code>home()</code></li>
-                            </ul>
-                            <h4>Stylo & Apparence</h4>
-                            <ul>
-                                <li><code>pu()</code>, <code>pd()</code></li>
-                                <li><code>pencolor(c)</code>, <code>fillcolor(c)</code></li>
-                                <li><code>setwidth(w)</code></li>
-                                <li><code>fill()</code>, <code>cs()</code></li>
-                                <li><code>ht()</code>, <code>st()</code></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4>Formes</h4>
-                            <ul>
-                                <li><code>circle(r)</code>, <code>arc(deg, r)</code></li>
-                                <li><code>rectangle(w, h)</code></li>
-                                <li><code>ellipse(w, h)</code></li>
-                                <li><code>line(x1, y1, x2, y2)</code></li>
-                                <li><code>write("texte")</code></li>
-                            </ul>
-                            <h4>Math & Divers</h4>
-                            <ul>
-                                <li><code>sin(d)</code>, <code>cos(d)</code>, <code>pi</code></li>
-                                <li><code>random(n)</code>, <code>rgb(r,g,b)</code></li>
-                                <li><code>repeat(n, () => { ... })</code></li>
-                                <li><code>posx()</code>, <code>posy()</code>, <code>heading()</code></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="examples">
-                        <h4>Exemples :</h4>
+                <div class="examples-section">
+                    <h3>Exemples</h3>
+                    <div class="examples-grid">
                         <button class="example-btn" data-code="repeat(36, () => {
   fd(50);
   rt(10);
@@ -97,7 +62,11 @@ fill();">Étoile remplie</button>
             </div>
         </main>
     </div>
-    <script src="turtle.js"></script>
-    <script src="main.js"></script>
+    <!-- Scripts split into logical modules -->
+    <script src="canva.js"></script>
+    <script src="syntaxe.js"></script>
+    <script src="library.js"></script>
+    <script src="editorSyntaxe.js"></script>
+    <script src="editorUI.js"></script>
 </body>
 </html>
