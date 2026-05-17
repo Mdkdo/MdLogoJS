@@ -14,9 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const newFileBtn = document.getElementById('newFileBtn');
     const openFileBtn = document.getElementById('openFileBtn');
     const saveFileBtn = document.getElementById('saveFileBtn');
+    const toolbarRunBtn = document.getElementById('toolbarRunBtn');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const settingsBtn = document.getElementById('settingsBtn');
 
+    const undoBtn = document.getElementById('undoBtn');
+    const redoBtn = document.getElementById('redoBtn');
     const selectAllBtn = document.getElementById('selectAllBtn');
     const copyBtn = document.getElementById('copyBtn');
     const cutBtn = document.getElementById('cutBtn');
@@ -24,6 +27,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const commentBtn = document.getElementById('commentBtn');
     const indentBtn = document.getElementById('indentBtn');
     const unindentBtn = document.getElementById('unindentBtn');
+
+    // Undo/Redo Logic
+    let undoStack = [codeEditor.value];
+    let redoStack = [];
+    const MAX_STACK = 50;
+
+    function saveState() {
+        const currentCode = codeEditor.value;
+        if (undoStack[undoStack.length - 1] !== currentCode) {
+            undoStack.push(currentCode);
+            if (undoStack.length > MAX_STACK) undoStack.shift();
+            redoStack = [];
+        }
+    }
+
+    codeEditor.addEventListener('keydown', (e) => {
+        // Simple heuristic for "meaningful" changes (Enter, Space, etc.)
+        if (e.key === 'Enter' || e.key === ' ') {
+            saveState();
+        }
+    });
+
+    codeEditor.addEventListener('blur', saveState);
 
     // Theme Toggle
     themeToggleBtn.addEventListener('click', () => {
@@ -35,8 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // File Actions
     newFileBtn.addEventListener('click', () => {
         if (confirm('Voulez-vous créer un nouveau fichier ? Le code actuel sera perdu.')) {
+            saveState();
             codeEditor.value = '';
+            updateHighlight();
             turtle.reset();
+            saveState();
         }
     });
 
@@ -48,8 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = (event) => {
+                saveState();
                 codeEditor.value = event.target.result;
                 updateHighlight();
+                saveState();
             };
             reader.readAsText(file);
         };
@@ -69,6 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    toolbarRunBtn.addEventListener('click', runCode);
+
     // Settings
     settingsBtn.addEventListener('click', () => {
         const bgColor = prompt('Couleur de fond du canva (ex: white, #fff, rgb(255,255,255)) :', turtle.canvas.style.backgroundColor || 'white');
@@ -83,6 +116,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Edit Actions
+    undoBtn.addEventListener('click', () => {
+        if (undoStack.length > 1) {
+            const currentState = undoStack.pop();
+            redoStack.push(currentState);
+            codeEditor.value = undoStack[undoStack.length - 1];
+            updateHighlight();
+        }
+        codeEditor.focus();
+    });
+
+    redoBtn.addEventListener('click', () => {
+        if (redoStack.length > 0) {
+            const state = redoStack.pop();
+            undoStack.push(state);
+            codeEditor.value = state;
+            updateHighlight();
+        }
+        codeEditor.focus();
+    });
+
     selectAllBtn.addEventListener('click', () => {
         codeEditor.select();
         codeEditor.focus();
@@ -104,10 +157,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = codeEditor.value;
         const selectedText = text.substring(start, end);
         if (selectedText) {
+            saveState();
             navigator.clipboard.writeText(selectedText);
             codeEditor.value = text.substring(0, start) + text.substring(end);
             codeEditor.selectionStart = codeEditor.selectionEnd = start;
             updateHighlight();
+            saveState();
         }
         codeEditor.focus();
     });
@@ -118,9 +173,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = codeEditor.value;
         try {
             const clipboardText = await navigator.clipboard.readText();
+            saveState();
             codeEditor.value = text.substring(0, start) + clipboardText + text.substring(end);
             codeEditor.selectionStart = codeEditor.selectionEnd = start + clipboardText.length;
             updateHighlight();
+            saveState();
         } catch (err) {
             console.error('Failed to read clipboard:', err);
         }
@@ -148,8 +205,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return line;
         });
+        saveState();
         codeEditor.value = newLines.join('\n');
         updateHighlight();
+        saveState();
         codeEditor.focus();
     });
 
@@ -170,8 +229,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return line;
         });
+        saveState();
         codeEditor.value = newLines.join('\n');
         updateHighlight();
+        saveState();
         codeEditor.focus();
     });
 
@@ -192,8 +253,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             return line;
         });
+        saveState();
         codeEditor.value = newLines.join('\n');
         updateHighlight();
+        saveState();
         codeEditor.focus();
     });
 
