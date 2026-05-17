@@ -22,6 +22,7 @@ const translateColor = (c) => (typeof c === 'string') ? (colorMap[c.toLowerCase(
 
 const setcolor = (c) => turtle.setcolor(translateColor(c));
 const setwidth = (w) => turtle.setwidth(w);
+const ps = setwidth;
 
 const arc = (a, r) => turtle.arc(a, r);
 const circle = (r) => turtle.circle(r);
@@ -45,9 +46,10 @@ const towards = (x, y) => turtle.towards(x, y);
 const ds = towards;
 
 const pencolor = (c) => turtle.pencolor(translateColor(c));
+const pc = pencolor;
 const fillcolor = (c) => turtle.fillcolor(translateColor(c));
 const fill = (c) => turtle.fill(c);
-const canvascolor = (c) => turtle.canvascolor(c);
+const canvascolor = (c) => turtle.canvascolor(translateColor(c));
 
 const repeat = (n, fn) => {
     for (let i = 0; i < n; i++) {

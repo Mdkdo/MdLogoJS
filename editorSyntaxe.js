@@ -6,13 +6,13 @@ const runCode = () => {
     code = code.replace(/\^/g, '**');
 
     const helpers = {
-        fd, bk, rt, lt, pu, pd, cs, clean, home, setcolor, setwidth,
+        fd, bk, rt, lt, pu, pd, cs, clean, home, setcolor, setwidth, ps,
         arc, circle, e, rectangle, ellipse, line, write, font,
         setxy, setheading, ht, st, posx, posy, heading, distance, towards,
         ds, nce, ng,
-        pencolor, fillcolor, fill, canvascolor,
+        pencolor, pc, fillcolor, fill, canvascolor,
         sin, cos, tan, atan, pi, sqrt, pow, abs, exp, ln, random, m,
-        integer, round, ceil, mod, o, min, max, rgb,
+        integer, round, ceil, mod, modulo, o, min, max, rgb,
         playsound, showimage, showvideo,
         repeat
     };

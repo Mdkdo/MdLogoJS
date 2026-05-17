@@ -32,12 +32,13 @@
                 <ul>
                     <li><code>pu()</code> : Lever le crayon</li>
                     <li><code>pd()</code> : Baisser le crayon</li>
-                    <li><code>pencolor(c)</code> : Changer la couleur du crayon</li>
+                    <li><code>pencolor(c)</code>, <code>pc(c)</code> : Changer la couleur du crayon</li>
                     <li><code>fillcolor(c)</code> : Changer la couleur de remplissage</li>
-                    <li><code>setwidth(w)</code> : Fixer l'épaisseur du crayon</li>
+                    <li><code>setwidth(w)</code>, <code>ps(n)</code> : Fixer l'épaisseur du crayon</li>
                     <li><code>fill()</code> : Remplir la forme actuelle</li>
                     <li><code>cs()</code> : Vide l'écran et réinitialise la tortue</li>
                     <li><code>clean()</code> : Efface le dessin sans bouger la tortue</li>
+                    <li><code>canvascolor(c)</code> : Changer la couleur de fond</li>
                     <li><code>ht()</code>, <code>st()</code> : Cacher/Montrer la tortue</li>
                 </ul>
             </div>
@@ -54,8 +55,10 @@
                 <h4>Math & Divers</h4>
                 <ul>
                     <li><code>sin(d)</code>, <code>cos(d)</code>, <code>tan(d)</code>, <code>atan(y, x)</code></li>
-                    <li><code>sqrt(n)</code>, <code>pow(a, b)</code>, <code>pi</code></li>
-                    <li><code>random(n)</code> : Nombre aléatoire entre 0 et n</li>
+                    <li><code>sqrt(n)</code>, <code>pow(a, b)</code>, <code>pi</code>, <code>exp(n)</code>, <code>ln(n)</code></li>
+                    <li><code>integer(n)</code>, <code>round(n)</code>, <code>ceil(n)</code></li>
+                    <li><code>random(n)</code>, <code>m(n)</code> : Nombre aléatoire entre 0 et n</li>
+                    <li><code>mod(a, b)</code>, <code>modulo(a, b)</code>, <code>o(a, b)</code> : Reste de la division</li>
                     <li><code>rgb(r, g, b)</code> : Créer une couleur</li>
                     <li><code>repeat(n, () => { ... })</code> : Répéter n fois</li>
                     <li><code>posx()</code>, <code>posy()</code>, <code>heading()</code></li>

@@ -86,9 +86,6 @@ class Turtle {
         this.draw();
     }
 
-    setcolor(color) {
-        this.color = color;
-    }
 
     setwidth(width) {
         this.width = width;

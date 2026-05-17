@@ -18,6 +18,7 @@ const integer = Math.floor;
 const round = Math.round;
 const ceil = Math.ceil;
 const mod = (a, b) => a % b;
+const modulo = mod;
 const o = mod;
 const min = Math.min;
 const max = Math.max;
