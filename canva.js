@@ -83,6 +83,8 @@ class Turtle {
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height / 2;
         this.angle = -Math.PI / 2;
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x, this.y);
         this.draw();
     }
 
