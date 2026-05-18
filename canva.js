@@ -13,6 +13,8 @@ class Turtle {
         this.x = 0; // Relative to origin
         this.y = 0; // Relative to origin
         this.angle = Math.PI / 2; // Pointing up (90 degrees in math sense if Y is up)
+        this.isProcessing = false;
+        this.commandQueue = [];
         this.penDown = true;
         this.color = '#000000';
         this.fillColor = '#000000';
@@ -26,12 +28,30 @@ class Turtle {
         this.isProcessing = false;
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.x, this.y);
 
         if (this.turtleCtx) {
             this.draw();
         }
+    }
+
+    reset() {
+        this.originX = this.canvas.width / 2;
+        this.originY = this.canvas.height / 2;
+        this.x = 0;
+        this.y = 0;
+        this.angle = Math.PI / 2;
+        this.isProcessing = false;
+        this.commandQueue = [];
+        this.penDown = true;
+        this.color = '#000000';
+        this.fillColor = '#000000';
+        this.width = 1;
+        this.visible = true;
+        this.fontName = '12px Arial';
+        this.turtleImage = null;
+
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.draw();
     }
 
     fd(dist) {
@@ -40,10 +60,6 @@ class Turtle {
             this.processQueue();
             return;
         }
-        // In screen space: y increases down, so for "up" in user space we subtract
-        // We use Math.cos and Math.sin on the angle.
-        // If angle=90deg (PI/2), cos=0, sin=1.
-        // User x: 0 + dist * 0 = 0. User y: 0 + dist * 1 = dist.
         const newX = this.x + dist * Math.cos(this.angle);
         const newY = this.y + dist * Math.sin(this.angle);
 

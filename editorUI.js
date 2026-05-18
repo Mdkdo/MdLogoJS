@@ -3,8 +3,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('turtleCanvas');
     const turtleLayer = document.getElementById('turtleLayer');
 
+    // Resize function
+    function resizeCanvas() {
+        const container = canvas.parentElement;
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        canvas.width = w * 0.95;
+        canvas.height = h * 0.95;
+        turtleLayer.width = w * 0.95;
+        turtleLayer.height = h * 0.95;
+        if (turtle) {
+            turtle.originX = canvas.width / 2;
+            turtle.originY = canvas.height / 2;
+            turtle.draw();
+        }
+    }
+
     // Initialize turtle
     turtle = new Turtle(canvas, turtleLayer);
+    window.addEventListener('resize', resizeCanvas);
+
+    // Initial resize after mode switch or load
+    setTimeout(resizeCanvas, 100);
 
     const codeEditor = document.getElementById('codeEditor');
     const terminalOutput = document.getElementById('terminalOutput');
@@ -22,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     runBtnTop.addEventListener('click', () => {
         app.className = 'mode-execution';
+        resizeCanvas();
         runCode();
     });
 
@@ -46,9 +67,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Terminal logic
     const toggleTerminalBtn = document.getElementById('toggleTerminalBtn');
     const clearTerminalBtn = document.getElementById('clearTerminalBtn');
+    const showTerminalBtn = document.getElementById('showTerminalBtn');
 
     toggleTerminalBtn.addEventListener('click', () => {
-        terminalSection.classList.toggle('hidden');
+        terminalSection.classList.add('hidden');
+        showTerminalBtn.classList.remove('hidden');
+    });
+
+    showTerminalBtn.addEventListener('click', () => {
+        terminalSection.classList.remove('hidden');
+        showTerminalBtn.classList.add('hidden');
     });
 
     clearTerminalBtn.addEventListener('click', () => {

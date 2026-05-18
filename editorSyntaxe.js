@@ -90,6 +90,7 @@ const helpers = {
 
 function runCode() {
     const code = document.getElementById('codeEditor').value;
+    turtle.reset();
     executeSnippet(code);
 }
 

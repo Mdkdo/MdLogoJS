@@ -126,8 +126,9 @@ body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Tahom
 .inline-cmd-container input { flex: 1; border: none; padding: 8px 15px; outline: none; background: transparent; color: var(--text-color); }
 .inline-cmd-container button { border: none; background: var(--primary-color); color: white; padding: 0 15px; cursor: pointer; }
 
-.canvas-container { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; overflow: auto; background: #ddd; }
+.canvas-container { flex: 1; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; background: #ddd; }
 canvas { position: absolute; background: white; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+#turtleLayer { background: transparent; box-shadow: none; pointer-events: none; }
 
 #terminal-section { height: 200px; display: flex; flex-direction: column; background: var(--terminal-bg); color: var(--terminal-text); border-top: 2px solid #555; }
 .terminal-header { display: flex; justify-content: space-between; align-items: center; padding: 5px 15px; background: #333; font-size: 0.9rem; }
@@ -136,12 +137,14 @@ canvas { position: absolute; background: white; box-shadow: 0 0 20px rgba(0,0,0,
 .terminal-error { color: #ff5f56; }
 .terminal-warn { color: #ffbd2e; }
 
+#showTerminalBtn { position: absolute; bottom: 10px; right: 20px; z-index: 100; background: #333; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
+
 /* Common UI */
 button.primary { background: var(--primary-color); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
 button.primary:hover { background: var(--primary-hover); }
 button.danger { background: var(--danger-color); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
 
-.hidden { display: none; }
+.hidden { display: none !important; }
 
 /* Syntax Colors */
 .hl-keyword { color: var(--hl-keyword); font-weight: bold; }
