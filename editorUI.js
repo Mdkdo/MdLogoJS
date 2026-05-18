@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeSelect = document.getElementById('themeSelect');
     themeSelect.addEventListener('change', (e) => {
         document.body.className = e.target.value;
+        saveSettings();
     });
 
     // View Switching
@@ -94,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     bgColorPicker.addEventListener('input', (e) => {
         canvas.style.backgroundColor = e.target.value;
+        saveSettings();
     });
 
     turtleImgSelect.addEventListener('change', (e) => {
@@ -103,7 +105,43 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             turtle.setTurtleImage(val);
         }
+        saveSettings();
     });
+
+    function saveSettings() {
+        const settings = {
+            theme: themeSelect.value,
+            bgColor: bgColorPicker.value,
+            turtleImg: turtleImgSelect.value
+        };
+        localStorage.setItem('logoJsSettings', JSON.stringify(settings));
+    }
+
+    function loadSettings() {
+        const saved = localStorage.getItem('logoJsSettings');
+        if (saved) {
+            const settings = JSON.parse(saved);
+
+            // Apply Theme
+            themeSelect.value = settings.theme || 'theme-light';
+            document.body.className = themeSelect.value;
+
+            // Apply BG Color
+            bgColorPicker.value = settings.bgColor || '#ffffff';
+            canvas.style.backgroundColor = bgColorPicker.value;
+
+            // Apply Turtle Img
+            turtleImgSelect.value = settings.turtleImg || 'default';
+            if (turtleImgSelect.value === 'default') {
+                turtle.setTurtleImage(null);
+            } else {
+                turtle.setTurtleImage(turtleImgSelect.value);
+            }
+        }
+    }
+
+    // Load settings after turtle is initialized
+    loadSettings();
 
     runBtnTop.addEventListener('click', () => {
         app.className = 'mode-execution';

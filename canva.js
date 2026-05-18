@@ -4,6 +4,7 @@ class Turtle {
         this.ctx = canvas.getContext('2d');
         this.turtleLayer = turtleLayer;
         this.turtleCtx = turtleLayer ? turtleLayer.getContext('2d') : null;
+        this.turtleImage = null;
         this.reset();
     }
 
@@ -21,7 +22,6 @@ class Turtle {
         this.width = 1;
         this.visible = true;
         this.fontName = '12px Arial';
-        this.turtleImage = null;
         this.speed = 1000; // Fast by default
         this.isDrawingSmooth = false;
 
