@@ -111,9 +111,48 @@ body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', Tahom
 .separator { width: 1px; background: var(--border-color); margin: 5px 10px; }
 
 #editor-container { flex: 1; position: relative; overflow: hidden; background: var(--editor-bg); }
-#codeEditor, #highlighting { margin: 0; padding: 20px; border: none; width: 100%; height: 100%; font-family: 'Fira Code', 'Courier New', Courier, monospace; font-size: 16px; line-height: 1.5; position: absolute; top: 0; left: 0; white-space: pre; word-wrap: normal; overflow: auto; }
-#codeEditor { color: transparent; background: transparent; caret-color: var(--text-color); resize: none; z-index: 2; outline: none; }
-#highlighting { pointer-events: none; z-index: 1; color: var(--text-color); }
+#codeEditor, #highlighting {
+    margin: 0;
+    padding: 20px;
+    border: none;
+    width: 100%;
+    height: 100%;
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: pre;
+    word-wrap: normal;
+    overflow: auto;
+    tab-size: 2;
+    -moz-tab-size: 2;
+    font-variant-ligatures: none;
+    letter-spacing: normal;
+}
+#codeEditor {
+    color: transparent;
+    background: transparent;
+    caret-color: var(--text-color);
+    resize: none;
+    z-index: 2;
+    outline: none;
+    -webkit-text-fill-color: transparent;
+}
+#highlighting {
+    pointer-events: none;
+    z-index: 1;
+    color: var(--text-color);
+}
+#highlighting code {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 0;
+    margin: 0;
+    background: transparent !important;
+}
 
 .examples-bar { display: flex; align-items: center; gap: 10px; padding: 10px 20px; border-top: 1px solid var(--border-color); background: var(--header-bg); }
 .examples-bar h3 { font-size: 1rem; margin: 0; }

@@ -77,10 +77,12 @@ const showimage = (url, x, y, w, h) => {
     img.onload = () => {
         const ix = (x !== undefined) ? x : turtle.x;
         const iy = (y !== undefined) ? y : turtle.y;
+        const sx = turtle.originX + ix;
+        const sy = turtle.originY - iy;
         if (w !== undefined && h !== undefined) {
-            turtle.ctx.drawImage(img, ix, iy, w, h);
+            turtle.ctx.drawImage(img, sx - w/2, sy - h/2, w, h);
         } else {
-            turtle.ctx.drawImage(img, ix, iy);
+            turtle.ctx.drawImage(img, sx - img.width/2, sy - img.height/2);
         }
     };
     img.src = url;
@@ -95,9 +97,13 @@ const showvideo = (url, x, y, w, h) => {
     video.onplay = () => {
         const drawVideo = () => {
             if (video.paused || video.ended) return;
-            const vx = (x !== undefined) ? x : turtle.x;
-            const vy = (y !== undefined) ? y : turtle.y;
-            turtle.ctx.drawImage(video, vx, vy, w || 320, h || 240);
+            const ix = (x !== undefined) ? x : turtle.x;
+            const iy = (y !== undefined) ? y : turtle.y;
+            const sx = turtle.originX + ix;
+            const sy = turtle.originY - iy;
+            const vw = w || 320;
+            const vh = h || 240;
+            turtle.ctx.drawImage(video, sx - vw/2, sy - vh/2, vw, vh);
             requestAnimationFrame(drawVideo);
         };
         drawVideo();

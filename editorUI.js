@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveFileBtn = document.getElementById('saveFileBtn');
     const undoBtn = document.getElementById('undoBtn');
     const redoBtn = document.getElementById('redoBtn');
+    const selectAllBtn = document.getElementById('selectAllBtn');
     const copyBtn = document.getElementById('copyBtn');
     const cutBtn = document.getElementById('cutBtn');
     const pasteBtn = document.getElementById('pasteBtn');
@@ -209,6 +210,10 @@ document.addEventListener('DOMContentLoaded', () => {
             codeEditor.value = state;
             updateHighlight();
         }
+    });
+
+    selectAllBtn.addEventListener('click', () => {
+        codeEditor.select();
     });
 
     copyBtn.addEventListener('click', () => {
