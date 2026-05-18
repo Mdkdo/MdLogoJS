@@ -67,6 +67,17 @@ function syncScroll() {
     highlighting.scrollLeft = codeEditor.scrollLeft;
 };
 
+function logToTerminal(msg, type = 'log') {
+    const terminal = document.getElementById('terminalOutput');
+    if (!terminal) return;
+
+    const div = document.createElement('div');
+    div.className = `terminal-msg terminal-${type}`;
+    div.textContent = msg;
+    terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
 function runCode() {
     const codeEditor = document.getElementById('codeEditor');
     let code = codeEditor.value;
@@ -83,16 +94,36 @@ function runCode() {
         sin, cos, tan, atan, pi, sqrt, pow, abs, exp, ln, random, m,
         integer, round, ceil, mod, modulo, o, min, max, rgb,
         playsound, showimage, showvideo,
-        repeat
+        repeat,
+        console: {
+            log: (...args) => logToTerminal(args.join(' '), 'log'),
+            error: (...args) => logToTerminal(args.join(' '), 'error'),
+            warn: (...args) => logToTerminal(args.join(' '), 'warn'),
+            clear: () => { document.getElementById('terminalOutput').innerHTML = ''; }
+        },
+        print: (...args) => logToTerminal(args.join(' '), 'log')
     };
 
     try {
         const keys = Object.keys(helpers);
         const values = Object.values(helpers);
-        const execute = new Function(...keys, code);
+        // Use a wrapper to catch asynchronous errors or provide better context
+        const execute = new Function(...keys, `"use strict";\n${code}`);
         execute(...values);
     } catch (err) {
-        alert('Erreur dans votre code : ' + err.message);
+        let errorMsg = err.message;
+
+        // Try to find the line number in the stack trace
+        const stack = err.stack;
+        if (stack) {
+            const match = stack.match(/<anonymous>:(\d+):(\d+)/);
+            if (match) {
+                const lineNum = parseInt(match[1]) - 1; // Subtract 1 because of "use strict"
+                errorMsg = `Ligne ${lineNum}: ${errorMsg}`;
+            }
+        }
+
+        logToTerminal(errorMsg, 'error');
         console.error(err);
     }
-};
+}

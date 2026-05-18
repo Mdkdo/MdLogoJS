@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const codeEditor = document.getElementById('codeEditor');
     const runBtn = document.getElementById('runBtn');
     const clearBtn = document.getElementById('clearBtn');
+    const clearTerminalBtn = document.getElementById('clearTerminalBtn');
     const exampleBtns = document.querySelectorAll('.example-btn');
 
     // Toolbar Buttons
@@ -264,6 +265,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     clearBtn.addEventListener('click', () => {
         turtle.reset();
+    });
+
+    clearTerminalBtn.addEventListener('click', () => {
+        document.getElementById('terminalOutput').innerHTML = '';
     });
 
     exampleBtns.forEach(btn => {
