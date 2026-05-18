@@ -1,33 +1,82 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const app = document.getElementById('app');
     const canvas = document.getElementById('turtleCanvas');
     const turtleLayer = document.getElementById('turtleLayer');
 
-    // Initialize the global turtle instance from library.js
+    // Initialize turtle
     turtle = new Turtle(canvas, turtleLayer);
 
     const codeEditor = document.getElementById('codeEditor');
-    const runBtn = document.getElementById('runBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const clearTerminalBtn = document.getElementById('clearTerminalBtn');
-    const exampleBtns = document.querySelectorAll('.example-btn');
+    const terminalOutput = document.getElementById('terminalOutput');
+    const terminalSection = document.getElementById('terminal-section');
+
+    // Theme logic
+    const themeSelect = document.getElementById('themeSelect');
+    themeSelect.addEventListener('change', (e) => {
+        document.body.className = e.target.value;
+    });
+
+    // View Switching
+    const runBtnTop = document.getElementById('runBtnTop');
+    const backToEditorBtn = document.getElementById('backToEditorBtn');
+
+    runBtnTop.addEventListener('click', () => {
+        app.className = 'mode-execution';
+        runCode();
+    });
+
+    backToEditorBtn.addEventListener('click', () => {
+        app.className = 'mode-editor';
+        turtle.stop();
+    });
 
     // Toolbar Buttons
     const newFileBtn = document.getElementById('newFileBtn');
     const openFileBtn = document.getElementById('openFileBtn');
     const saveFileBtn = document.getElementById('saveFileBtn');
-    const toolbarRunBtn = document.getElementById('toolbarRunBtn');
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const settingsBtn = document.getElementById('settingsBtn');
-
     const undoBtn = document.getElementById('undoBtn');
     const redoBtn = document.getElementById('redoBtn');
-    const selectAllBtn = document.getElementById('selectAllBtn');
     const copyBtn = document.getElementById('copyBtn');
     const cutBtn = document.getElementById('cutBtn');
     const pasteBtn = document.getElementById('pasteBtn');
     const commentBtn = document.getElementById('commentBtn');
     const indentBtn = document.getElementById('indentBtn');
     const unindentBtn = document.getElementById('unindentBtn');
+
+    // Terminal logic
+    const toggleTerminalBtn = document.getElementById('toggleTerminalBtn');
+    const clearTerminalBtn = document.getElementById('clearTerminalBtn');
+
+    toggleTerminalBtn.addEventListener('click', () => {
+        terminalSection.classList.toggle('hidden');
+    });
+
+    clearTerminalBtn.addEventListener('click', () => {
+        terminalOutput.innerHTML = '';
+    });
+
+    // Stop execution
+    const stopBtn = document.getElementById('stopBtn');
+    stopBtn.addEventListener('click', () => {
+        turtle.stop();
+    });
+
+    // Inline Command
+    const inlineCmdInput = document.getElementById('inlineCmdInput');
+    const runInlineBtn = document.getElementById('runInlineBtn');
+
+    function runInline() {
+        const cmd = inlineCmdInput.value;
+        if (cmd.trim()) {
+            executeSnippet(cmd);
+            inlineCmdInput.value = '';
+        }
+    }
+
+    runInlineBtn.addEventListener('click', runInline);
+    inlineCmdInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') runInline();
+    });
 
     // Undo/Redo Logic
     let undoStack = [codeEditor.value];
@@ -44,44 +93,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     codeEditor.addEventListener('keydown', (e) => {
-        // Simple heuristic for "meaningful" changes (Enter, Space, etc.)
-        if (e.key === 'Enter' || e.key === ' ') {
-            saveState();
-        }
+        if (e.key === 'Enter' || e.key === ' ') saveState();
     });
-
     codeEditor.addEventListener('blur', saveState);
-
-    // Theme Toggle
-    themeToggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        themeToggleBtn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-    });
 
     // File Actions
     newFileBtn.addEventListener('click', () => {
-        if (confirm('Voulez-vous créer un nouveau fichier ? Le code actuel sera perdu.')) {
-            saveState();
+        if (confirm('Nouveau fichier ?')) {
             codeEditor.value = '';
             updateHighlight();
             turtle.reset();
-            saveState();
         }
     });
 
     openFileBtn.addEventListener('click', () => {
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = '.js,.txt';
         input.onchange = (e) => {
             const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onload = (event) => {
-                saveState();
-                codeEditor.value = event.target.result;
+            reader.onload = (ev) => {
+                codeEditor.value = ev.target.result;
                 updateHighlight();
-                saveState();
             };
             reader.readAsText(file);
         };
@@ -89,42 +122,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     saveFileBtn.addEventListener('click', () => {
-        const filename = prompt('Nom du fichier à enregistrer :', 'mon_code_logo.js');
-        if (filename) {
-            const blob = new Blob([codeEditor.value], { type: 'text/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-    });
-
-    toolbarRunBtn.addEventListener('click', runCode);
-
-    // Settings
-    settingsBtn.addEventListener('click', () => {
-        const bgColor = prompt('Couleur de fond du canva (ex: white, #fff, rgb(255,255,255)) :', turtle.canvas.style.backgroundColor || 'white');
-        if (bgColor !== null) {
-            turtle.canvascolor(bgColor);
-        }
-
-        const turtleImgUrl = prompt('URL ou chemin de l\'image de la tortue (laisser vide pour la tortue par défaut) :');
-        if (turtleImgUrl !== null) {
-            turtle.setTurtleImage(turtleImgUrl);
-        }
+        const blob = new Blob([codeEditor.value], { type: 'text/javascript' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'code.js';
+        a.click();
     });
 
     // Edit Actions
     undoBtn.addEventListener('click', () => {
         if (undoStack.length > 1) {
-            const currentState = undoStack.pop();
-            redoStack.push(currentState);
+            redoStack.push(undoStack.pop());
             codeEditor.value = undoStack[undoStack.length - 1];
             updateHighlight();
         }
-        codeEditor.focus();
     });
 
     redoBtn.addEventListener('click', () => {
@@ -134,156 +146,78 @@ document.addEventListener('DOMContentLoaded', () => {
             codeEditor.value = state;
             updateHighlight();
         }
-        codeEditor.focus();
-    });
-
-    selectAllBtn.addEventListener('click', () => {
-        codeEditor.select();
-        codeEditor.focus();
     });
 
     copyBtn.addEventListener('click', () => {
-        const start = codeEditor.selectionStart;
-        const end = codeEditor.selectionEnd;
-        const selectedText = codeEditor.value.substring(start, end);
-        if (selectedText) {
-            navigator.clipboard.writeText(selectedText);
-        }
-        codeEditor.focus();
+        navigator.clipboard.writeText(codeEditor.value.substring(codeEditor.selectionStart, codeEditor.selectionEnd));
     });
 
     cutBtn.addEventListener('click', () => {
         const start = codeEditor.selectionStart;
         const end = codeEditor.selectionEnd;
         const text = codeEditor.value;
-        const selectedText = text.substring(start, end);
-        if (selectedText) {
+        const selected = text.substring(start, end);
+        if (selected) {
+            navigator.clipboard.writeText(selected);
             saveState();
-            navigator.clipboard.writeText(selectedText);
             codeEditor.value = text.substring(0, start) + text.substring(end);
             codeEditor.selectionStart = codeEditor.selectionEnd = start;
             updateHighlight();
-            saveState();
         }
-        codeEditor.focus();
     });
 
     pasteBtn.addEventListener('click', async () => {
+        const text = await navigator.clipboard.readText();
         const start = codeEditor.selectionStart;
         const end = codeEditor.selectionEnd;
-        const text = codeEditor.value;
-        try {
-            const clipboardText = await navigator.clipboard.readText();
-            saveState();
-            codeEditor.value = text.substring(0, start) + clipboardText + text.substring(end);
-            codeEditor.selectionStart = codeEditor.selectionEnd = start + clipboardText.length;
-            updateHighlight();
-            saveState();
-        } catch (err) {
-            console.error('Failed to read clipboard:', err);
-        }
-        codeEditor.focus();
+        const current = codeEditor.value;
+        saveState();
+        codeEditor.value = current.substring(0, start) + text + current.substring(end);
+        codeEditor.selectionStart = codeEditor.selectionEnd = start + text.length;
+        updateHighlight();
     });
 
-    commentBtn.addEventListener('click', () => {
+    // Indent/Comment
+    function modifySelection(fn) {
         const start = codeEditor.selectionStart;
         const end = codeEditor.selectionEnd;
         const text = codeEditor.value;
-        const lines = text.split('\n');
+        const before = text.substring(0, start);
+        const selection = text.substring(start, end);
+        const after = text.substring(end);
 
-        let charCount = 0;
-        const newLines = lines.map(line => {
-            const lineStart = charCount;
-            const lineEnd = charCount + line.length;
-            charCount += line.length + 1; // +1 for \n
+        const lines = selection.split('\n');
+        const newSelection = lines.map(fn).join('\n');
 
-            if (lineEnd >= start && lineStart <= end) {
-                if (line.trim().startsWith('//')) {
-                    return line.replace(/\/\/ ?/, '');
-                } else {
-                    return '// ' + line;
-                }
-            }
-            return line;
-        });
         saveState();
-        codeEditor.value = newLines.join('\n');
+        codeEditor.value = before + newSelection + after;
+        codeEditor.selectionStart = start;
+        codeEditor.selectionEnd = start + newSelection.length;
         updateHighlight();
-        saveState();
-        codeEditor.focus();
+    }
+
+    commentBtn.addEventListener('click', () => {
+        modifySelection(line => line.trim().startsWith('//') ? line.replace('// ', '').replace('//', '') : '// ' + line);
     });
 
     indentBtn.addEventListener('click', () => {
-        const start = codeEditor.selectionStart;
-        const end = codeEditor.selectionEnd;
-        const text = codeEditor.value;
-        const lines = text.split('\n');
-
-        let charCount = 0;
-        const newLines = lines.map(line => {
-            const lineStart = charCount;
-            const lineEnd = charCount + line.length;
-            charCount += line.length + 1;
-
-            if (lineEnd >= start && lineStart <= end) {
-                return '  ' + line;
-            }
-            return line;
-        });
-        saveState();
-        codeEditor.value = newLines.join('\n');
-        updateHighlight();
-        saveState();
-        codeEditor.focus();
+        modifySelection(line => '  ' + line);
     });
 
     unindentBtn.addEventListener('click', () => {
-        const start = codeEditor.selectionStart;
-        const end = codeEditor.selectionEnd;
-        const text = codeEditor.value;
-        const lines = text.split('\n');
-
-        let charCount = 0;
-        const newLines = lines.map(line => {
-            const lineStart = charCount;
-            const lineEnd = charCount + line.length;
-            charCount += line.length + 1;
-
-            if (lineEnd >= start && lineStart <= end) {
-                return line.replace(/^  ?/, '');
-            }
-            return line;
-        });
-        saveState();
-        codeEditor.value = newLines.join('\n');
-        updateHighlight();
-        saveState();
-        codeEditor.focus();
+        modifySelection(line => line.replace(/^  ?/, ''));
     });
 
-    runBtn.addEventListener('click', runCode);
-
-    clearBtn.addEventListener('click', () => {
-        turtle.reset();
-    });
-
-    clearTerminalBtn.addEventListener('click', () => {
-        document.getElementById('terminalOutput').innerHTML = '';
-    });
-
-    exampleBtns.forEach(btn => {
+    // Examples
+    document.querySelectorAll('.example-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             codeEditor.value = btn.getAttribute('data-code');
             updateHighlight();
-            turtle.reset();
-            runCode();
         });
     });
 
     codeEditor.addEventListener('input', updateHighlight);
     codeEditor.addEventListener('scroll', syncScroll);
 
-    // Initial run
     updateHighlight();
-    runCode();
 });

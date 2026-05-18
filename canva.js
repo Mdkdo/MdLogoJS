@@ -8,9 +8,11 @@ class Turtle {
     }
 
     reset() {
-        this.x = this.canvas.width / 2;
-        this.y = this.canvas.height / 2;
-        this.angle = -Math.PI / 2; // Pointing up
+        this.originX = this.canvas.width / 2;
+        this.originY = this.canvas.height / 2;
+        this.x = 0; // Relative to origin
+        this.y = 0; // Relative to origin
+        this.angle = Math.PI / 2; // Pointing up (90 degrees in math sense if Y is up)
         this.penDown = true;
         this.color = '#000000';
         this.fillColor = '#000000';
@@ -38,6 +40,10 @@ class Turtle {
             this.processQueue();
             return;
         }
+        // In screen space: y increases down, so for "up" in user space we subtract
+        // We use Math.cos and Math.sin on the angle.
+        // If angle=90deg (PI/2), cos=0, sin=1.
+        // User x: 0 + dist * 0 = 0. User y: 0 + dist * 1 = dist.
         const newX = this.x + dist * Math.cos(this.angle);
         const newY = this.y + dist * Math.sin(this.angle);
 
@@ -45,10 +51,10 @@ class Turtle {
             this.ctx.strokeStyle = this.color;
             this.ctx.lineWidth = this.width;
             this.ctx.lineCap = 'round';
-            this.ctx.lineTo(newX, newY);
+            this.ctx.beginPath();
+            this.ctx.moveTo(this.originX + this.x, this.originY - this.y);
+            this.ctx.lineTo(this.originX + newX, this.originY - newY);
             this.ctx.stroke();
-        } else {
-            this.ctx.moveTo(newX, newY);
         }
 
         this.x = newX;
@@ -66,7 +72,8 @@ class Turtle {
             this.processQueue();
             return;
         }
-        this.angle += (deg * Math.PI) / 180;
+        // Turtle rt is clockwise. If Y is up, clockwise rotation decreases the math angle.
+        this.angle -= (deg * Math.PI) / 180;
         this.draw();
     }
 
@@ -76,7 +83,7 @@ class Turtle {
             this.processQueue();
             return;
         }
-        this.angle -= (deg * Math.PI) / 180;
+        this.angle += (deg * Math.PI) / 180;
         this.draw();
     }
 
@@ -86,8 +93,6 @@ class Turtle {
 
     pd() {
         this.penDown = true;
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.x, this.y);
     }
 
     cs() {
@@ -100,11 +105,9 @@ class Turtle {
     }
 
     home() {
-        this.x = this.canvas.width / 2;
-        this.y = this.canvas.height / 2;
-        this.angle = -Math.PI / 2;
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.x, this.y);
+        this.x = 0;
+        this.y = 0;
+        this.angle = Math.PI / 2;
         this.draw();
     }
 
@@ -118,9 +121,12 @@ class Turtle {
             this.ctx.strokeStyle = this.color;
             this.ctx.lineWidth = this.width;
             this.ctx.beginPath();
-            const startAngle = this.angle;
-            const endAngle = this.angle + (angle * Math.PI) / 180;
-            this.ctx.arc(this.x, this.y, radius, startAngle, endAngle, angle < 0);
+            // Need to convert angles and Y coordinate
+            // Note: arc in canvas is clockwise by default.
+            // Screen Y is inverted, so clockwise arc on screen is counter-clockwise in user space if Y is up.
+            const startAngle = -this.angle;
+            const endAngle = -(this.angle + (angle * Math.PI) / 180);
+            this.ctx.arc(this.originX + this.x, this.originY - this.y, radius, startAngle, endAngle, angle > 0);
             this.ctx.stroke();
         }
     }
@@ -130,7 +136,7 @@ class Turtle {
             this.ctx.strokeStyle = this.color;
             this.ctx.lineWidth = this.width;
             this.ctx.beginPath();
-            this.ctx.arc(this.x, this.y, radius, 0, 2 * Math.PI);
+            this.ctx.arc(this.originX + this.x, this.originY - this.y, radius, 0, 2 * Math.PI);
             this.ctx.stroke();
         }
     }
@@ -140,11 +146,17 @@ class Turtle {
             this.ctx.strokeStyle = this.color;
             this.ctx.lineWidth = this.width;
             if (x2 === undefined) {
-                // If only 2 args, treat as w, h relative to turtle
-                this.ctx.strokeRect(this.x, this.y, x1, y1);
+                // Relative to turtle. x1=w, y1=h.
+                // In user space: rect at (x,y) with width x1, height y1.
+                // Screen: rect at (originX+x, originY-y-y1) with width x1, height y1.
+                this.ctx.strokeRect(this.originX + this.x, this.originY - this.y - y1, x1, y1);
             } else {
-                // If 4 args, treat as absolute coords
-                this.ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+                // Absolute user coords. (x1, y1) to (x2, y2)
+                const ux = Math.min(x1, x2);
+                const uy = Math.max(y1, y2);
+                const uw = Math.abs(x2 - x1);
+                const uh = Math.abs(y2 - y1);
+                this.ctx.strokeRect(this.originX + ux, this.originY - uy, uw, uh);
             }
         }
     }
@@ -155,15 +167,15 @@ class Turtle {
             this.ctx.lineWidth = this.width;
             this.ctx.beginPath();
             if (x2 === undefined) {
-                // Relative to turtle
-                this.ctx.ellipse(this.x, this.y, x1 / 2, y1 / 2, this.angle, 0, 2 * Math.PI);
+                // Relative to turtle. x1=w, y1=h.
+                this.ctx.ellipse(this.originX + this.x, this.originY - this.y, x1 / 2, y1 / 2, -this.angle, 0, 2 * Math.PI);
             } else {
-                // Absolute bounding box
-                const w = Math.abs(x2 - x1);
-                const h = Math.abs(y2 - y1);
+                // Absolute bounding box.
                 const cx = (x1 + x2) / 2;
                 const cy = (y1 + y2) / 2;
-                this.ctx.ellipse(cx, cy, w / 2, h / 2, 0, 0, 2 * Math.PI);
+                const rx = Math.abs(x2 - x1) / 2;
+                const ry = Math.abs(y2 - y1) / 2;
+                this.ctx.ellipse(this.originX + cx, this.originY - cy, rx, ry, 0, 0, 2 * Math.PI);
             }
             this.ctx.stroke();
         }
@@ -174,8 +186,8 @@ class Turtle {
             this.ctx.strokeStyle = this.color;
             this.ctx.lineWidth = this.width;
             this.ctx.beginPath();
-            this.ctx.moveTo(x1, y1);
-            this.ctx.lineTo(x2, y2);
+            this.ctx.moveTo(this.originX + x1, this.originY - y1);
+            this.ctx.lineTo(this.originX + x2, this.originY - y2);
             this.ctx.stroke();
         }
     }
@@ -183,7 +195,7 @@ class Turtle {
     write(text) {
         this.ctx.font = this.fontName;
         this.ctx.fillStyle = this.color;
-        this.ctx.fillText(text, this.x, this.y);
+        this.ctx.fillText(text, this.originX + this.x, this.originY - this.y);
     }
 
     font(style) {
@@ -191,22 +203,22 @@ class Turtle {
     }
 
     polygon(sides, size) {
-        const angle = 360 / sides;
+        const deg = 360 / sides;
         for (let i = 0; i < sides; i++) {
             this.fd(size);
-            this.rt(angle);
+            this.rt(deg);
         }
     }
 
     star(points, outerRadius, innerRadius) {
-        let angle = Math.PI / points;
+        let step = Math.PI / points;
         this.ctx.beginPath();
         for (let i = 0; i < 2 * points; i++) {
             let r = (i % 2 === 0) ? outerRadius : innerRadius;
-            let currX = this.x + r * Math.cos(this.angle + i * angle);
-            let currY = this.y + r * Math.sin(this.angle + i * angle);
-            if (i === 0) this.ctx.moveTo(currX, currY);
-            else this.ctx.lineTo(currX, currY);
+            let currX = this.x + r * Math.cos(this.angle + i * step);
+            let currY = this.y + r * Math.sin(this.angle + i * step);
+            if (i === 0) this.ctx.moveTo(this.originX + currX, this.originY - currY);
+            else this.ctx.lineTo(this.originX + currX, this.originY - currY);
         }
         this.ctx.closePath();
         this.ctx.strokeStyle = this.color;
@@ -220,8 +232,8 @@ class Turtle {
 
     drawOnCanvas(targetCtx) {
         targetCtx.save();
-        targetCtx.translate(this.x, this.y);
-        targetCtx.rotate(this.angle + Math.PI / 2);
+        targetCtx.translate(this.originX + this.x, this.originY - this.y);
+        targetCtx.rotate(-this.angle + Math.PI / 2);
         if (this.turtleImage) {
             const size = 30;
             targetCtx.drawImage(this.turtleImage, -size/2, -size/2, size, size);
@@ -243,7 +255,7 @@ class Turtle {
     drawImage(url, w, h) {
         const img = new Image();
         img.onload = () => {
-            this.ctx.drawImage(img, this.x - w/2, this.y - h/2, w, h);
+            this.ctx.drawImage(img, this.originX + this.x - w/2, this.originY - this.y - h/2, w, h);
             this.draw();
         };
         img.src = url;
@@ -254,7 +266,7 @@ class Turtle {
         if (type === 'linear') {
             grd = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
         } else {
-            grd = this.ctx.createRadialGradient(this.x, this.y, 5, this.x, this.y, 100);
+            grd = this.ctx.createRadialGradient(this.originX + this.x, this.originY - this.y, 5, this.originX + this.x, this.originY - this.y, 100);
         }
         colors.forEach((c, i) => grd.addColorStop(i / (colors.length - 1), c));
         this.color = grd;
@@ -285,7 +297,8 @@ class Turtle {
     }
 
     setheading(deg) {
-        this.angle = (deg - 90) * Math.PI / 180;
+        // User heading 0 is up. Math angle 90deg is up.
+        this.angle = (90 - deg) * Math.PI / 180;
         this.draw();
     }
 
@@ -301,7 +314,12 @@ class Turtle {
 
     posx() { return this.x; }
     posy() { return this.y; }
-    heading() { return (this.angle * 180 / Math.PI) + 90; }
+    heading() {
+        let h = 90 - (this.angle * 180 / Math.PI);
+        while (h < 0) h += 360;
+        while (h >= 360) h -= 360;
+        return h;
+    }
 
     distance(x, y) {
         return Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
@@ -309,13 +327,14 @@ class Turtle {
 
     towards(x, y) {
         const angle = Math.atan2(y - this.y, x - this.x);
-        return (angle * 180 / Math.PI) + 90;
+        let h = 90 - (angle * 180 / Math.PI);
+        while (h < 0) h += 360;
+        while (h >= 360) h -= 360;
+        return h;
     }
 
     setcolor(color) {
         this.color = color;
-        this.ctx.beginPath(); // Start new path with new color
-        this.ctx.moveTo(this.x, this.y);
     }
 
     pencolor(c) { this.setcolor(c); }
@@ -325,8 +344,6 @@ class Turtle {
         if (color) this.fillColor = color;
         this.ctx.fillStyle = this.fillColor;
         this.ctx.fill();
-        this.ctx.beginPath();
-        this.ctx.moveTo(this.x, this.y);
     }
 
     canvascolor(c) {
@@ -341,8 +358,8 @@ class Turtle {
         if (!this.visible) return;
 
         this.turtleCtx.save();
-        this.turtleCtx.translate(this.x, this.y);
-        this.turtleCtx.rotate(this.angle + Math.PI / 2);
+        this.turtleCtx.translate(this.originX + this.x, this.originY - this.y);
+        this.turtleCtx.rotate(-this.angle + Math.PI / 2);
 
         if (this.turtleImage) {
             const size = 30;
@@ -384,25 +401,27 @@ class Turtle {
 
     animateFd(dist) {
         return new Promise(resolve => {
+            if (!this.isProcessing) return resolve();
             const steps = Math.max(1, Math.abs(dist) / (this.speed / 60));
             const stepX = (dist * Math.cos(this.angle)) / steps;
             const stepY = (dist * Math.sin(this.angle)) / steps;
             let currentStep = 0;
 
             const animate = () => {
+                if (!this.isProcessing) return resolve();
                 if (currentStep < steps) {
-                    const newX = this.x + stepX;
-                    const newY = this.y + stepY;
+                    const nextX = this.x + stepX;
+                    const nextY = this.y + stepY;
                     if (this.penDown) {
                         this.ctx.strokeStyle = this.color;
                         this.ctx.lineWidth = this.width;
-                        this.ctx.lineTo(newX, newY);
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(this.originX + this.x, this.originY - this.y);
+                        this.ctx.lineTo(this.originX + nextX, this.originY - nextY);
                         this.ctx.stroke();
-                    } else {
-                        this.ctx.moveTo(newX, newY);
                     }
-                    this.x = newX;
-                    this.y = newY;
+                    this.x = nextX;
+                    this.y = nextY;
                     this.draw();
                     currentStep++;
                     requestAnimationFrame(animate);
@@ -416,12 +435,19 @@ class Turtle {
 
     animateRotate(deg) {
         return new Promise(resolve => {
-            const rad = (deg * Math.PI) / 180;
+            if (!this.isProcessing) return resolve();
+            // rt is clockwise, so if Y is up, it decreases math angle.
+            // But deg passed to animateRotate is signed.
+            // If rt(90) called, animateRotate(-90) should be called?
+            // Wait, processQueue calls animateRotate(cmd.deg) for rt, and animateRotate(-cmd.deg) for lt.
+            // So if rt(90), deg=90. Math angle should decrease by 90.
+            const rad = -(deg * Math.PI) / 180;
             const steps = Math.max(1, Math.abs(deg) / 5);
             const stepRad = rad / steps;
             let currentStep = 0;
 
             const animate = () => {
+                if (!this.isProcessing) return resolve();
                 if (currentStep < steps) {
                     this.angle += stepRad;
                     this.draw();
@@ -437,6 +463,11 @@ class Turtle {
 
     smooth(active) {
         this.isDrawingSmooth = active !== false;
+    }
+
+    stop() {
+        this.isProcessing = false;
+        this.commandQueue = [];
     }
 
     // Alias for common Logo commands

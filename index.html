@@ -7,92 +7,100 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Interpréteur Logo JavaScript</h1>
-        </header>
-        <main>
-            <div class="canvas-area">
-                <canvas id="turtleCanvas" width="600" height="600"></canvas>
-                <canvas id="turtleLayer" width="600" height="600"></canvas>
-            </div>
-            <div class="controls">
-                <div class="editor-section">
-                    <div class="toolbar file-toolbar">
+<body class="theme-light">
+    <div id="app" class="mode-editor">
+        <!-- Editor View -->
+        <div id="editor-view" class="view">
+            <header class="main-header">
+                <h1>Logo JS</h1>
+                <div class="header-actions">
+                    <select id="themeSelect">
+                        <option value="theme-light">Clair</option>
+                        <option value="theme-dark">Sombre</option>
+                        <option value="theme-monokai">Monokai</option>
+                        <option value="theme-solarized">Solarized</option>
+                        <option value="theme-midnight">Midnight</option>
+                    </select>
+                    <button id="runBtnTop" class="primary"><i class="fas fa-play"></i> Exécuter</button>
+                    <a href="help.html" target="_blank" class="help-link"><i class="fas fa-question-circle"></i> Aide</a>
+                </div>
+            </header>
+
+            <div class="editor-workspace">
+                <div class="toolbar-container">
+                    <div class="toolbar">
                         <button id="newFileBtn" title="Nouveau"><i class="fas fa-file"></i></button>
                         <button id="openFileBtn" title="Ouvrir"><i class="fas fa-folder-open"></i></button>
                         <button id="saveFileBtn" title="Enregistrer"><i class="fas fa-save"></i></button>
-                        <button id="toolbarRunBtn" title="Exécuter"><i class="fas fa-play"></i></button>
-                        <button id="themeToggleBtn" title="Mode Sombre/Clair"><i class="fas fa-moon"></i></button>
-                        <button id="settingsBtn" title="Paramètres"><i class="fas fa-cog"></i></button>
-                        <a href="help.html" target="_blank" class="help-link-icon" title="Aide"><i class="fas fa-question-circle"></i></a>
-                    </div>
-                    <div class="toolbar edit-toolbar">
+                        <span class="separator"></span>
                         <button id="undoBtn" title="Annuler"><i class="fas fa-undo"></i></button>
                         <button id="redoBtn" title="Rétablir"><i class="fas fa-redo"></i></button>
-                        <button id="selectAllBtn" title="Sélectionner tout"><i class="fas fa-expand"></i></button>
+                        <span class="separator"></span>
                         <button id="copyBtn" title="Copier"><i class="fas fa-copy"></i></button>
                         <button id="cutBtn" title="Couper"><i class="fas fa-cut"></i></button>
                         <button id="pasteBtn" title="Coller"><i class="fas fa-paste"></i></button>
-                        <button id="commentBtn" title="Commenter/Décommenter"><i class="fas fa-comment-slash"></i></button>
-                        <button id="indentBtn" title="Augmenter l'indentation"><i class="fas fa-indent"></i></button>
-                        <button id="unindentBtn" title="Réduire l'indentation"><i class="fas fa-outdent"></i></button>
-                    </div>
-                    <div class="editor-header">
-                        <h3>Code JavaScript</h3>
-                    </div>
-                    <div id="editor-container">
-                        <textarea id="codeEditor" spellcheck="false">repeat(4, () => {
-  fd(100);
-  rt(90);
-});</textarea>
-                        <pre id="highlighting" aria-hidden="true"><code id="highlighting-content"></code></pre>
-                    </div>
-                    <div class="buttons">
-                        <button id="runBtn" class="primary">Exécuter</button>
-                        <button id="clearBtn">Effacer</button>
-                    </div>
-                    <div class="terminal-section">
-                        <div class="terminal-header">
-                            <span>Terminal</span>
-                            <button id="clearTerminalBtn" title="Effacer le terminal"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                        <div id="terminalOutput"></div>
+                        <span class="separator"></span>
+                        <button id="commentBtn" title="Commenter"><i class="fas fa-comment-slash"></i></button>
+                        <button id="indentBtn" title="Indenter"><i class="fas fa-indent"></i></button>
+                        <button id="unindentBtn" title="Désindenter"><i class="fas fa-outdent"></i></button>
                     </div>
                 </div>
-                <div class="examples-section">
-                    <h3>Exemples</h3>
-                    <div class="examples-grid">
-                        <button class="example-btn" data-code="repeat(36, () => {
-  fd(50);
-  rt(10);
-});">Cercle</button>
-                        <button class="example-btn" data-code="for(let i=0; i<100; i++) {
-  fd(i*2);
-  rt(91);
-}">Spirale</button>
-                        <button class="example-btn" data-code="setcolor('purple');
-repeat(18, () => {
+
+                <div id="editor-container">
+                    <textarea id="codeEditor" spellcheck="false">repeat(36, () => {
   repeat(4, () => {
     fd(100);
     rt(90);
   });
-  rt(20);
-});">Fleur</button>
-                        <button class="example-btn" data-code="cs();
-fillcolor('yellow');
-repeat(36, (i) => {
-  fd(100);
-  rt(145);
-});
-fill();">Étoile remplie</button>
+  rt(10);
+});</textarea>
+                    <pre id="highlighting" aria-hidden="true"><code id="highlighting-content"></code></pre>
+                </div>
+            </div>
+
+            <div class="examples-bar">
+                <h3>Exemples :</h3>
+                <button class="example-btn" data-code="for(let i=0; i<100; i++) { fd(i*2); rt(91); }">Spirale</button>
+                <button class="example-btn" data-code="setcolor('red'); polygon(6, 50);">Hexagone</button>
+                <button class="example-btn" data-code="star(5, 100, 40);">Étoile</button>
+            </div>
+        </div>
+
+        <!-- Execution View -->
+        <div id="execution-view" class="view">
+            <div class="exec-toolbar">
+                <div class="toolbar-row">
+                    <button id="backToEditorBtn"><i class="fas fa-edit"></i> Editeur</button>
+                    <button id="stopBtn" class="danger"><i class="fas fa-stop"></i> Arrêter</button>
+                </div>
+                <div class="toolbar-row">
+                    <div class="inline-cmd-container">
+                        <input type="text" id="inlineCmdInput" placeholder="Saisir une commande Logo...">
+                        <button id="runInlineBtn"><i class="fas fa-chevron-right"></i></button>
                     </div>
                 </div>
             </div>
-        </main>
+
+            <div class="canvas-container">
+                <canvas id="turtleCanvas" width="800" height="600"></canvas>
+                <canvas id="turtleLayer" width="800" height="600"></canvas>
+            </div>
+
+            <div id="terminal-section">
+                <div class="terminal-header">
+                    <span>Terminal</span>
+                    <div class="terminal-actions">
+                        <button id="clearTerminalBtn" title="Effacer"><i class="fas fa-trash-alt"></i></button>
+                        <button id="toggleTerminalBtn" title="Masquer"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                </div>
+                <div id="terminalOutput"></div>
+            </div>
+
+            <button id="showTerminalBtn" class="hidden"><i class="fas fa-console"></i> Terminal</button>
+        </div>
     </div>
-    <!-- Scripts split into logical modules -->
+
     <script src="canva.js"></script>
     <script src="syntaxe.js"></script>
     <script src="library.js"></script>
