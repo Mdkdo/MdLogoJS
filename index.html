@@ -95,8 +95,32 @@
         <div id="execution-view" class="view">
             <div class="exec-toolbar">
                 <div class="toolbar-row">
-                    <button id="backToEditorBtn"><i class="fas fa-edit"></i> Editeur</button>
-                    <button id="stopBtn" class="danger"><i class="fas fa-stop"></i> Arrêter</button>
+                    <button id="backToEditorBtn" class="exec-btn"><i class="fas fa-edit"></i> Editeur</button>
+                    <button id="stopBtn" class="exec-btn danger"><i class="fas fa-stop"></i> Arrêter</button>
+
+                    <div class="status-bar">
+                        <div class="status-item" title="Position de la Souris">
+                            <i class="fas fa-mouse-pointer"></i> <span id="mouse-pos">0, 0</span>
+                        </div>
+                        <div class="status-item" title="Position de la Tortue">
+                            <i class="fas fa-location-arrow"></i> <span id="turtle-pos">0, 0</span>
+                        </div>
+                        <div class="status-item" title="Angle de la Tortue">
+                            <i class="fas fa-compass"></i> <span id="turtle-angle">0°</span>
+                        </div>
+                        <div class="status-item" title="Épaisseur du trait">
+                            <i class="fas fa-pen-nib"></i> <span id="pen-size">1</span>
+                        </div>
+                        <div class="status-item" title="Couleur du trait">
+                            <span class="color-preview" id="pen-color-preview"></span> <span id="pen-color">#000000</span>
+                        </div>
+                        <div class="status-item" title="Couleur de remplissage">
+                            <span class="color-preview" id="fill-color-preview"></span> <span id="fill-color-status">#000000</span>
+                        </div>
+                        <div class="status-item" title="Couleur du fond">
+                            <span class="color-preview" id="bg-color-preview-status"></span> <span id="bg-color-status">#ffffff</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="toolbar-row">
                     <div class="inline-cmd-container">

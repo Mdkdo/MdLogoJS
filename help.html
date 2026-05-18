@@ -102,6 +102,8 @@
         <a href="#formes"><i class="fas fa-shapes"></i> Formes</a>
         <a href="#media"><i class="fas fa-photo-video"></i> Média & Image</a>
         <a href="#math"><i class="fas fa-calculator"></i> Mathématiques</a>
+        <a href="#structures"><i class="fas fa-code"></i> Structures de contrôle</a>
+        <a href="#js-base"><i class="fas fa-js-square"></i> Fondamentaux JS</a>
         <a href="#avance"><i class="fas fa-cogs"></i> Avancé</a>
         <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Retour au code</a>
     </div>
@@ -212,6 +214,80 @@
                             <tr><td><code>heading()</code></td><td>Angle actuel (0-360). Alias: <code>ng</code></td></tr>
                         </tbody>
                     </table>
+                </div>
+            </section>
+
+            <section id="structures">
+                <h2><i class="fas fa-code"></i> Structures de contrôle</h2>
+                <div class="card">
+                    <h3>Si... Sinon (if... else)</h3>
+                    <div class="example">if (posx() > 100) {
+    setcolor('red');
+} else {
+    setcolor('blue');
+}</div>
+
+                    <h3>Switch</h3>
+                    <div class="example">let forme = 'carré';
+switch(forme) {
+    case 'carré':
+        polygon(4, 50); break;
+    case 'triangle':
+        polygon(3, 50); break;
+    default:
+        circle(50);
+}</div>
+
+                    <h3>Boucles (for, while)</h3>
+                    <p>Utilisez <code>break</code> pour sortir d'une boucle et <code>continue</code> pour passer à l'itération suivante.</p>
+                    <div class="example">// Boucle for
+for (let i = 0; i < 10; i++) {
+    if (i === 5) continue; // Saute l'étape 5
+    fd(i * 10);
+    rt(90);
+}
+
+// Boucle while
+let d = 0;
+while (d < 100) {
+    fd(d);
+    rt(45);
+    d += 10;
+    if (d > 80) break; // Arrête la boucle
+}</div>
+                </div>
+            </section>
+
+            <section id="js-base">
+                <h2><i class="fas fa-js-square"></i> Fondamentaux JS</h2>
+                <div class="card">
+                    <h3>Variables & Déclaration</h3>
+                    <div class="example">let x = 10;        // Variable modifiable
+const PI = 3.14;    // Constante
+var y = 20;         // Ancienne méthode (déconseillé)</div>
+
+                    <h3>Conversions</h3>
+                    <div class="example">let n = Number("123");     // Vers nombre
+let s = String(123);     // Vers texte
+let i = parseInt("10.5"); // Vers entier</div>
+
+                    <h3>Tableaux (Arrays)</h3>
+                    <div class="example">let couleurs = ['red', 'green', 'blue'];
+couleurs.push('yellow'); // Ajoute
+setcolor(couleurs[0]);   // Accède au 1er élément</div>
+
+                    <h3>Dictionnaires / Objets</h3>
+                    <div class="example">let config = { taille: 50, couleur: 'red' };
+setwidth(config.taille);
+setcolor(config['couleur']);</div>
+
+                    <h3>Classes</h3>
+                    <div class="example">class Forme {
+    constructor(t) { this.t = t; }
+    dessine() { fd(this.t); rt(90); }
+}
+let f = new Forme(100);
+f.dessine();</div>
                 </div>
             </section>
 

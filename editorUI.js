@@ -23,6 +23,40 @@ document.addEventListener('DOMContentLoaded', () => {
     turtle = new Turtle(canvas, turtleLayer);
     window.addEventListener('resize', resizeCanvas);
 
+    // Mouse tracking on canvas
+    const mousePosSpan = document.getElementById('mouse-pos');
+    [canvas, turtleLayer].forEach(c => {
+        c.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.round(e.clientX - rect.left - (canvas.width / 2));
+            const y = Math.round((canvas.height / 2) - (e.clientY - rect.top));
+            mousePosSpan.textContent = `${x}, ${y}`;
+        });
+    });
+
+    // Real-time status update
+    function updateStatus() {
+        if (!turtle) return;
+        document.getElementById('turtle-pos').textContent = `${Math.round(turtle.x)}, ${Math.round(turtle.y)}`;
+        document.getElementById('turtle-angle').textContent = `${Math.round(turtle.heading())}°`;
+        document.getElementById('pen-size').textContent = turtle.width;
+
+        const pColor = turtle.color;
+        document.getElementById('pen-color').textContent = typeof pColor === 'string' ? pColor : 'Gradient';
+        document.getElementById('pen-color-preview').style.backgroundColor = typeof pColor === 'string' ? pColor : 'transparent';
+
+        const fColor = turtle.fillColor;
+        document.getElementById('fill-color-status').textContent = fColor;
+        document.getElementById('fill-color-preview').style.backgroundColor = fColor;
+
+        const bColor = getComputedStyle(canvas).backgroundColor;
+        document.getElementById('bg-color-status').textContent = bColor;
+        document.getElementById('bg-color-preview-status').style.backgroundColor = bColor;
+
+        requestAnimationFrame(updateStatus);
+    }
+    updateStatus();
+
     // Initial resize after mode switch or load
     setTimeout(resizeCanvas, 100);
 

@@ -26,6 +26,8 @@ class Turtle {
         this.isDrawingSmooth = false;
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.currentPath = new Path2D();
+        this.currentPath.moveTo(this.originX + this.x, this.originY - this.y);
 
         if (this.turtleCtx) {
             this.draw();
@@ -49,6 +51,9 @@ class Turtle {
             this.ctx.moveTo(this.originX + this.x, this.originY - this.y);
             this.ctx.lineTo(this.originX + newX, this.originY - newY);
             this.ctx.stroke();
+            this.currentPath.lineTo(this.originX + newX, this.originY - newY);
+        } else {
+            this.currentPath.moveTo(this.originX + newX, this.originY - newY);
         }
 
         this.x = newX;
@@ -91,17 +96,21 @@ class Turtle {
 
     cs() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.currentPath = new Path2D();
         this.home();
     }
 
     clean() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.currentPath = new Path2D();
+        this.currentPath.moveTo(this.originX + this.x, this.originY - this.y);
     }
 
     home() {
         this.x = 0;
         this.y = 0;
         this.angle = Math.PI / 2;
+        this.currentPath.moveTo(this.originX + this.x, this.originY - this.y);
         this.draw();
     }
 
@@ -111,18 +120,17 @@ class Turtle {
     }
 
     arc(angle, radius) {
+        const startAngle = -this.angle;
+        const endAngle = -(this.angle + (angle * Math.PI) / 180);
+
         if (this.penDown) {
             this.ctx.strokeStyle = this.color;
             this.ctx.lineWidth = this.width;
             this.ctx.beginPath();
-            // Need to convert angles and Y coordinate
-            // Note: arc in canvas is clockwise by default.
-            // Screen Y is inverted, so clockwise arc on screen is counter-clockwise in user space if Y is up.
-            const startAngle = -this.angle;
-            const endAngle = -(this.angle + (angle * Math.PI) / 180);
             this.ctx.arc(this.originX + this.x, this.originY - this.y, radius, startAngle, endAngle, angle > 0);
             this.ctx.stroke();
         }
+        this.currentPath.arc(this.originX + this.x, this.originY - this.y, radius, startAngle, endAngle, angle > 0);
     }
 
     circle(radius) {
@@ -133,46 +141,57 @@ class Turtle {
             this.ctx.arc(this.originX + this.x, this.originY - this.y, radius, 0, 2 * Math.PI);
             this.ctx.stroke();
         }
+        this.currentPath.arc(this.originX + this.x, this.originY - this.y, radius, 0, 2 * Math.PI);
     }
 
     rectangle(x1, y1, x2, y2) {
+        let rx, ry, rw, rh;
+        if (x2 === undefined) {
+            rx = this.originX + this.x;
+            ry = this.originY - this.y - y1;
+            rw = x1;
+            rh = y1;
+        } else {
+            const ux = Math.min(x1, x2);
+            const uy = Math.max(y1, y2);
+            rw = Math.abs(x2 - x1);
+            rh = Math.abs(y2 - y1);
+            rx = this.originX + ux;
+            ry = this.originY - uy;
+        }
+
         if (this.penDown) {
             this.ctx.strokeStyle = this.color;
             this.ctx.lineWidth = this.width;
-            if (x2 === undefined) {
-                // Relative to turtle. x1=w, y1=h.
-                // In user space: rect at (x,y) with width x1, height y1.
-                // Screen: rect at (originX+x, originY-y-y1) with width x1, height y1.
-                this.ctx.strokeRect(this.originX + this.x, this.originY - this.y - y1, x1, y1);
-            } else {
-                // Absolute user coords. (x1, y1) to (x2, y2)
-                const ux = Math.min(x1, x2);
-                const uy = Math.max(y1, y2);
-                const uw = Math.abs(x2 - x1);
-                const uh = Math.abs(y2 - y1);
-                this.ctx.strokeRect(this.originX + ux, this.originY - uy, uw, uh);
-            }
+            this.ctx.strokeRect(rx, ry, rw, rh);
         }
+        this.currentPath.rect(rx, ry, rw, rh);
     }
 
     ellipse(x1, y1, x2, y2) {
+        let ex, ey, erx, ery, erot;
+        if (x2 === undefined) {
+            ex = this.originX + this.x;
+            ey = this.originY - this.y;
+            erx = x1 / 2;
+            ery = y1 / 2;
+            erot = -this.angle;
+        } else {
+            ex = this.originX + (x1 + x2) / 2;
+            ey = this.originY - (y1 + y2) / 2;
+            erx = Math.abs(x2 - x1) / 2;
+            ery = Math.abs(y2 - y1) / 2;
+            erot = 0;
+        }
+
         if (this.penDown) {
             this.ctx.strokeStyle = this.color;
             this.ctx.lineWidth = this.width;
             this.ctx.beginPath();
-            if (x2 === undefined) {
-                // Relative to turtle. x1=w, y1=h.
-                this.ctx.ellipse(this.originX + this.x, this.originY - this.y, x1 / 2, y1 / 2, -this.angle, 0, 2 * Math.PI);
-            } else {
-                // Absolute bounding box.
-                const cx = (x1 + x2) / 2;
-                const cy = (y1 + y2) / 2;
-                const rx = Math.abs(x2 - x1) / 2;
-                const ry = Math.abs(y2 - y1) / 2;
-                this.ctx.ellipse(this.originX + cx, this.originY - cy, rx, ry, 0, 0, 2 * Math.PI);
-            }
+            this.ctx.ellipse(ex, ey, erx, ery, erot, 0, 2 * Math.PI);
             this.ctx.stroke();
         }
+        this.currentPath.ellipse(ex, ey, erx, ery, erot, 0, 2 * Math.PI);
     }
 
     line(x1, y1, x2, y2) {
@@ -184,6 +203,8 @@ class Turtle {
             this.ctx.lineTo(this.originX + x2, this.originY - y2);
             this.ctx.stroke();
         }
+        this.currentPath.moveTo(this.originX + x1, this.originY - y1);
+        this.currentPath.lineTo(this.originX + x2, this.originY - y2);
     }
 
     write(text) {
@@ -211,10 +232,18 @@ class Turtle {
             let r = (i % 2 === 0) ? outerRadius : innerRadius;
             let currX = this.x + r * Math.cos(this.angle + i * step);
             let currY = this.y + r * Math.sin(this.angle + i * step);
-            if (i === 0) this.ctx.moveTo(this.originX + currX, this.originY - currY);
-            else this.ctx.lineTo(this.originX + currX, this.originY - currY);
+            const sx = this.originX + currX;
+            const sy = this.originY - currY;
+            if (i === 0) {
+                this.ctx.moveTo(sx, sy);
+                this.currentPath.moveTo(sx, sy);
+            } else {
+                this.ctx.lineTo(sx, sy);
+                this.currentPath.lineTo(sx, sy);
+            }
         }
         this.ctx.closePath();
+        this.currentPath.closePath();
         this.ctx.strokeStyle = this.color;
         this.ctx.lineWidth = this.width;
         this.ctx.stroke();
@@ -287,6 +316,7 @@ class Turtle {
     setxy(x, y) {
         this.x = x;
         this.y = y;
+        this.currentPath.moveTo(this.originX + this.x, this.originY - this.y);
         this.draw();
     }
 
@@ -337,7 +367,7 @@ class Turtle {
     fill(color) {
         if (color) this.fillColor = color;
         this.ctx.fillStyle = this.fillColor;
-        this.ctx.fill();
+        this.ctx.fill(this.currentPath);
     }
 
     canvascolor(c) {
@@ -413,6 +443,9 @@ class Turtle {
                         this.ctx.moveTo(this.originX + this.x, this.originY - this.y);
                         this.ctx.lineTo(this.originX + nextX, this.originY - nextY);
                         this.ctx.stroke();
+                        this.currentPath.lineTo(this.originX + nextX, this.originY - nextY);
+                    } else {
+                        this.currentPath.moveTo(this.originX + nextX, this.originY - nextY);
                     }
                     this.x = nextX;
                     this.y = nextY;
