@@ -24,34 +24,12 @@ class Turtle {
         this.turtleImage = null;
         this.speed = 1000; // Fast by default
         this.isDrawingSmooth = false;
-        this.commandQueue = [];
-        this.isProcessing = false;
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         if (this.turtleCtx) {
             this.draw();
         }
-    }
-
-    reset() {
-        this.originX = this.canvas.width / 2;
-        this.originY = this.canvas.height / 2;
-        this.x = 0;
-        this.y = 0;
-        this.angle = Math.PI / 2;
-        this.isProcessing = false;
-        this.commandQueue = [];
-        this.penDown = true;
-        this.color = '#000000';
-        this.fillColor = '#000000';
-        this.width = 1;
-        this.visible = true;
-        this.fontName = '12px Arial';
-        this.turtleImage = null;
-
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.draw();
     }
 
     fd(dist) {

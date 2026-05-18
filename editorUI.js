@@ -39,6 +39,37 @@ document.addEventListener('DOMContentLoaded', () => {
     // View Switching
     const runBtnTop = document.getElementById('runBtnTop');
     const backToEditorBtn = document.getElementById('backToEditorBtn');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeModal = document.querySelector('.close-modal');
+
+    settingsBtn.addEventListener('click', () => {
+        settingsModal.classList.remove('hidden');
+    });
+
+    closeModal.addEventListener('click', () => {
+        settingsModal.classList.add('hidden');
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === settingsModal) settingsModal.classList.add('hidden');
+    });
+
+    const bgColorPicker = document.getElementById('bg-color-picker');
+    const turtleImgSelect = document.getElementById('turtle-img-select');
+
+    bgColorPicker.addEventListener('input', (e) => {
+        canvas.style.backgroundColor = e.target.value;
+    });
+
+    turtleImgSelect.addEventListener('change', (e) => {
+        const val = e.target.value;
+        if (val === 'default') {
+            turtle.setTurtleImage(null);
+        } else {
+            turtle.setTurtleImage(val);
+        }
+    });
 
     runBtnTop.addEventListener('click', () => {
         app.className = 'mode-execution';
@@ -150,11 +181,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     saveFileBtn.addEventListener('click', () => {
+        let filename = prompt('Nom du fichier (ex: dessin.js) :', 'code.js');
+        if (!filename) return;
+        if (!filename.endsWith('.js')) filename += '.js';
+
         const blob = new Blob([codeEditor.value], { type: 'text/javascript' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'code.js';
+        a.download = filename;
         a.click();
     });
 

@@ -22,9 +22,33 @@
                         <option value="theme-midnight">Midnight</option>
                     </select>
                     <button id="runBtnTop" class="primary"><i class="fas fa-play"></i> Exécuter</button>
+                    <button id="settingsBtn" title="Paramètres"><i class="fas fa-cog"></i></button>
                     <a href="help.html" target="_blank" class="help-link"><i class="fas fa-question-circle"></i> Aide</a>
                 </div>
             </header>
+
+            <div id="settings-modal" class="modal hidden">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Paramètres</h2>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="setting-item">
+                            <label for="bg-color-picker">Couleur du Canevas :</label>
+                            <input type="color" id="bg-color-picker" value="#ffffff">
+                        </div>
+                        <div class="setting-item">
+                            <label for="turtle-img-select">Image de la Tortue :</label>
+                            <select id="turtle-img-select">
+                                <option value="default">Classique (Triangle)</option>
+                                <option value="https://upload.wikimedia.org/wikipedia/commons/4/4c/Turtle-animation.gif">Tortue Réelle</option>
+                                <option value="https://cdn-icons-png.flaticon.com/512/1042/1042308.png">Vaisseau Spatial</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="editor-workspace">
                 <div class="toolbar-container">

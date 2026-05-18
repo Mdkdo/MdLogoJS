@@ -3,81 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aide & Commandes - Logo JS</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Documentation - Logo JS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
-        body { padding: 40px; }
-        .help-container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; }
-        .back-link { display: block; margin-bottom: 20px; color: #3498db; text-decoration: none; }
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f4f7f6;
+            --text: #333;
+            --code-bg: #eef2f3;
+            --border: #ddd;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden; /* Body doesn't scroll, layout does */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sidebar h2 { font-size: 1.2rem; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
+        .sidebar a { color: #bdc3c7; text-decoration: none; font-size: 0.9rem; padding: 5px 0; transition: 0.2s; }
+        .sidebar a:hover { color: white; padding-left: 5px; }
+        .back-btn { background: var(--accent); color: white !important; padding: 10px !important; border-radius: 4px; text-align: center; margin-top: auto; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto; /* Fix scrolling here */
+            scroll-behavior: smooth;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        h1 { color: var(--primary); border-bottom: 3px solid var(--accent); padding-bottom: 10px; }
+        h2 { color: var(--accent); margin-top: 40px; }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
+        th { background: var(--code-bg); color: var(--primary); font-size: 0.85rem; text-transform: uppercase; }
+
+        code {
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: #c7254e;
+            font-size: 0.9rem;
+        }
+
+        .example {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 5px;
+            font-family: monospace;
+            white-space: pre;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            background: var(--accent);
+            color: white;
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
-    <div class="help-container">
-        <a href="index.html" class="back-link">← Retour à l'interpréteur</a>
-        <h1>Aide & Commandes</h1>
-        <div class="help-grid">
-            <div>
-                <h4>Mouvement</h4>
-                <ul>
-                    <li><code>fd(n)</code> : Avancer de n pas</li>
-                    <li><code>bk(n)</code> : Reculer de n pas</li>
-                    <li><code>rt(deg)</code> : Tourner à droite de n degrés</li>
-                    <li><code>lt(deg)</code> : Tourner à gauche de n degrés</li>
-                    <li><code>setxy(x, y)</code> : Placer la tortue aux coordonnées x, y</li>
-                    <li><code>setheading(deg)</code> : Orienter la tortue (0 = haut)</li>
-                    <li><code>home()</code> : Ramener la tortue au centre</li>
-                </ul>
-                <h4>Stylo & Apparence</h4>
-                <ul>
-                    <li><code>pu()</code> : Lever le crayon</li>
-                    <li><code>pd()</code> : Baisser le crayon</li>
-                    <li><code>pencolor(c)</code>, <code>pc(c)</code> : Changer la couleur du crayon</li>
-                    <li><code>fillcolor(c)</code> : Changer la couleur de remplissage</li>
-                    <li><code>setwidth(w)</code>, <code>ps(n)</code> : Fixer l'épaisseur du crayon</li>
-                    <li><code>fill()</code> : Remplir la forme actuelle</li>
-                    <li><code>cs()</code> : Vide l'écran et réinitialise la tortue</li>
-                    <li><code>clean()</code> : Efface le dessin sans bouger la tortue</li>
-                    <li><code>canvascolor(c)</code> : Changer la couleur de fond</li>
-                    <li><code>ht()</code>, <code>st()</code> : Cacher/Montrer la tortue</li>
-                </ul>
-            </div>
-            <div>
-                <h4>Formes</h4>
-                <ul>
-                    <li><code>circle(r)</code> : Tracer un cercle de rayon r</li>
-                    <li><code>arc(deg, r)</code> : Tracer un arc de cercle</li>
-                    <li><code>rectangle(w, h)</code> : Tracer un rectangle</li>
-                    <li><code>ellipse(w, h)</code> : Tracer une ellipse</li>
-                    <li><code>polygon(sides, size)</code> : Tracer un polygone régulier</li>
-                    <li><code>star(points, outer, inner)</code> : Tracer une étoile</li>
-                    <li><code>line(x1, y1, x2, y2)</code> : Tracer une ligne entre deux points</li>
-                    <li><code>write("texte")</code> : Afficher du texte</li>
-                    <li><code>stamp()</code> : Tamponner la forme de la tortue</li>
-                </ul>
-                <h4>Math & Divers</h4>
-                <ul>
-                    <li><code>sin(d)</code>, <code>cos(d)</code>, <code>tan(d)</code>, <code>atan(y, x)</code></li>
-                    <li><code>sqrt(n)</code>, <code>pow(a, b)</code>, <code>pi</code>, <code>exp(n)</code>, <code>ln(n)</code></li>
-                    <li><code>integer(n)</code>, <code>round(n)</code>, <code>ceil(n)</code></li>
-                    <li><code>random(n)</code>, <code>m(n)</code> : Nombre aléatoire entre 0 et n</li>
-                    <li><code>mod(a, b)</code>, <code>modulo(a, b)</code>, <code>o(a, b)</code> : Reste de la division</li>
-                    <li><code>rgb(r, g, b)</code> : Créer une couleur</li>
-                    <li><code>repeat(n, () => { ... })</code> : Répéter n fois</li>
-                    <li><code>posx()</code>, <code>posy()</code>, <code>heading()</code></li>
-                    <li><code>distance(x, y)</code>, <code>towards(x, y)</code></li>
-                </ul>
-                <h4>Média & Avancé</h4>
-                <ul>
-                    <li><code>playsound(url)</code> : Jouer un son</li>
-                    <li><code>showimage(url, x, y, w, h)</code> : Afficher une image sur le canevas</li>
-                    <li><code>drawimage(url, w, h)</code> : Dessiner une image à la position de la tortue</li>
-                    <li><code>showvideo(url, x, y, w, h)</code> : Afficher une vidéo</li>
-                    <li><code>gradient(type, c1, c2, ...)</code> : Dégradé ('linear' ou 'radial')</li>
-                    <li><code>opacity(val)</code> : Opacité (0.0 à 1.0)</li>
-                    <li><code>smooth(true/false)</code> : Activer l'animation fluide</li>
-                </ul>
-            </div>
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <a href="#mouvement"><i class="fas fa-arrows-alt"></i> Mouvement</a>
+        <a href="#stylo"><i class="fas fa-pen"></i> Stylo & Couleurs</a>
+        <a href="#formes"><i class="fas fa-shapes"></i> Formes</a>
+        <a href="#media"><i class="fas fa-photo-video"></i> Média & Image</a>
+        <a href="#math"><i class="fas fa-calculator"></i> Mathématiques</a>
+        <a href="#avance"><i class="fas fa-cogs"></i> Avancé</a>
+        <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Retour au code</a>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <h1>Documentation Logo JS</h1>
+            <p>Bienvenue dans l'aide de l'interpréteur Logo JS. Toutes les fonctions suivent la syntaxe JavaScript standard.</p>
+
+            <section id="mouvement">
+                <h2><i class="fas fa-arrows-alt"></i> Mouvement</h2>
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr><th>Commande</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>fd(n)</code></td><td>Avance de n pas. Alias: <code>forward</code></td></tr>
+                            <tr><td><code>bk(n)</code></td><td>Recule de n pas. Alias: <code>back</code></td></tr>
+                            <tr><td><code>rt(deg)</code></td><td>Tourne à droite de n degrés. Alias: <code>right</code></td></tr>
+                            <tr><td><code>lt(deg)</code></td><td>Tourne à gauche de n degrés. Alias: <code>left</code></td></tr>
+                            <tr><td><code>setxy(x, y)</code></td><td>Déplace la tortue aux coordonnées (x,y). (0,0) est le centre.</td></tr>
+                            <tr><td><code>setheading(deg)</code></td><td>Oriente la tortue. 0 est le haut.</td></tr>
+                            <tr><td><code>home()</code></td><td>Ramène la tortue au centre (0,0).</td></tr>
+                            <tr><td><code>cs()</code></td><td>Efface tout et ramène la tortue au centre. Alias: <code>clearscreen</code></td></tr>
+                            <tr><td><code>clean()</code></td><td>Efface le dessin sans bouger la tortue.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="stylo">
+                <h2><i class="fas fa-pen"></i> Stylo & Couleurs</h2>
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr><th>Commande</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>pu()</code></td><td>Lève le stylo. Alias: <code>penup</code></td></tr>
+                            <tr><td><code>pd()</code></td><td>Abaisse le stylo. Alias: <code>pendown</code></td></tr>
+                            <tr><td><code>setcolor(c)</code></td><td>Change la couleur du stylo (ex: 'red', '#ff0000', 'rouge'). Alias: <code>pencolor</code>, <code>pc</code></td></tr>
+                            <tr><td><code>setwidth(n)</code></td><td>Change l'épaisseur du stylo. Alias: <code>ps</code></td></tr>
+                            <tr><td><code>fillcolor(c)</code></td><td>Définit la couleur de remplissage.</td></tr>
+                            <tr><td><code>fill()</code></td><td>Remplit la dernière forme tracée avec la couleur de remplissage.</td></tr>
+                            <tr><td><code>canvascolor(c)</code></td><td>Change la couleur de fond du canevas.</td></tr>
+                            <tr><td><code>opacity(n)</code></td><td>Définit l'opacité globale (0.0 à 1.0).</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="formes">
+                <h2><i class="fas fa-shapes"></i> Formes Géométriques</h2>
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr><th>Commande</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>circle(r)</code></td><td>Trace un cercle de rayon r. Alias: <code>e</code></td></tr>
+                            <tr><td><code>arc(deg, r)</code></td><td>Trace un arc de cercle.</td></tr>
+                            <tr><td><code>rectangle(w, h)</code></td><td>Trace un rectangle.</td></tr>
+                            <tr><td><code>ellipse(w, h)</code></td><td>Trace une ellipse.</td></tr>
+                            <tr><td><code>polygon(côtés, taille)</code></td><td>Trace un polygone régulier.</td></tr>
+                            <tr><td><code>star(points, r1, r2)</code></td><td>Trace une étoile à n branches.</td></tr>
+                            <tr><td><code>line(x1, y1, x2, y2)</code></td><td>Trace une ligne entre deux points.</td></tr>
+                            <tr><td><code>stamp()</code></td><td>Laisse une empreinte de la tortue sur le canevas.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="media">
+                <h2><i class="fas fa-photo-video"></i> Média & Image</h2>
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr><th>Commande</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>drawimage(url, w, h)</code></td><td>Dessine une image à la position de la tortue.</td></tr>
+                            <tr><td><code>showimage(url, x, y, w, h)</code></td><td>Affiche une image fixe sur le canevas.</td></tr>
+                            <tr><td><code>showvideo(url, x, y, w, h)</code></td><td>Affiche une vidéo sur le canevas.</td></tr>
+                            <tr><td><code>playsound(url)</code></td><td>Joue un fichier audio.</td></tr>
+                            <tr><td><code>write("texte")</code></td><td>Écrit du texte à la position de la tortue.</td></tr>
+                            <tr><td><code>font("style")</code></td><td>Change la police (ex: "bold 20px Arial").</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="math">
+                <h2><i class="fas fa-calculator"></i> Mathématiques</h2>
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr><th>Commande</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>sin(deg)</code>, <code>cos(deg)</code></td><td>Fonctions trigo (en degrés).</td></tr>
+                            <tr><td><code>tan(deg)</code>, <code>atan(y, x)</code></td><td>Fonctions trigo (en degrés).</td></tr>
+                            <tr><td><code>random(n)</code></td><td>Nombre aléatoire entre 0 et n. Alias: <code>m</code></td></tr>
+                            <tr><td><code>integer(n)</code></td><td>Partie entière. Alias: <code>round</code>, <code>ceil</code></td></tr>
+                            <tr><td><code>mod(a, b)</code></td><td>Reste de la division. Alias: <code>modulo</code>, <code>o</code></td></tr>
+                            <tr><td><code>sqrt(n)</code>, <code>pow(a, b)</code></td><td>Racine carrée et puissance.</td></tr>
+                            <tr><td><code>posx()</code>, <code>posy()</code></td><td>Position actuelle.</td></tr>
+                            <tr><td><code>heading()</code></td><td>Angle actuel (0-360). Alias: <code>ng</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="avance">
+                <h2><i class="fas fa-cogs"></i> Avancé</h2>
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr><th>Commande</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>smooth(true/false)</code></td><td>Active/Désactive l'animation fluide.</td></tr>
+                            <tr><td><code>gradient(type, c1, c2, ...)</code></td><td>Dégradé ('linear' ou 'radial').</td></tr>
+                            <tr><td><code>repeat(n, (i) => { ... })</code></td><td>Boucle de répétition simplifiée.</td></tr>
+                            <tr><td><code>console.log(...)</code></td><td>Affiche des messages dans le terminal. Alias: <code>print</code></td></tr>
+                        </tbody>
+                    </table>
+                    <p>Exemple de boucle complexe :</p>
+                    <div class="example">repeat(36, (i) => {
+  setcolor(rgb(i*7, 100, 255));
+  polygon(6, 50);
+  rt(10);
+});</div>
+                </div>
+            </section>
         </div>
     </div>
 </body>

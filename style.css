@@ -29,13 +29,13 @@
     --editor-bg: #1e1e1e;
     --toolbar-bg: #2d2d2d;
 
-    --hl-keyword: #0033cc;
-    --hl-command: #006666;
-    --hl-string: #228b22;
-    --hl-number: #666666;
-    --hl-comment: #808080;
-    --hl-operator: #cc0000;
-    --hl-unknown: #00bfff;
+    --hl-keyword: #bb86fc;
+    --hl-command: #03dac6;
+    --hl-string: #ffb74d;
+    --hl-number: #cf6679;
+    --hl-comment: #757575;
+    --hl-operator: #ffffff;
+    --hl-unknown: #b0bec5;
 }
 
 .theme-monokai {
@@ -145,6 +145,17 @@ button.primary:hover { background: var(--primary-hover); }
 button.danger { background: var(--danger-color); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
 
 .hidden { display: none !important; }
+
+/* Modal */
+.modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+.modal-content { background: var(--header-bg); padding: 0; border-radius: 8px; width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border-color); }
+.modal-header h2 { margin: 0; font-size: 1.2rem; }
+.close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-color); }
+.modal-body { padding: 20px; }
+.setting-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.setting-item label { font-weight: 500; }
+.setting-item select, .setting-item input { padding: 5px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); }
 
 /* Syntax Colors */
 .hl-keyword { color: var(--hl-keyword); font-weight: bold; }
