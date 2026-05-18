@@ -32,6 +32,15 @@ const ellipse = (w, h) => turtle.ellipse(w, h);
 const line = (x1, y1, x2, y2) => turtle.line(x1, y1, x2, y2);
 const write = (t) => turtle.write(t);
 const font = (s) => turtle.font(s);
+
+const polygon = (sides, size) => turtle.polygon(sides, size);
+const star = (points, outer, inner) => turtle.star(points, outer, inner);
+const stamp = () => turtle.stamp();
+const drawimage = (url, w, h) => turtle.drawImage(url, w, h);
+const gradient = (type, ...colors) => turtle.gradient(type, colors);
+const opacity = (val) => turtle.opacity(val);
+const smooth = (val) => turtle.smooth(val);
+
 const setxy = (x, y) => turtle.setxy(x, y);
 const setheading = (d) => turtle.setheading(d);
 const ht = () => turtle.ht();

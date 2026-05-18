@@ -18,6 +18,10 @@ class Turtle {
         this.visible = true;
         this.fontName = '12px Arial';
         this.turtleImage = null;
+        this.speed = 1000; // Fast by default
+        this.isDrawingSmooth = false;
+        this.commandQueue = [];
+        this.isProcessing = false;
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.beginPath();
@@ -29,6 +33,11 @@ class Turtle {
     }
 
     fd(dist) {
+        if (this.isDrawingSmooth) {
+            this.commandQueue.push({ type: 'fd', dist });
+            this.processQueue();
+            return;
+        }
         const newX = this.x + dist * Math.cos(this.angle);
         const newY = this.y + dist * Math.sin(this.angle);
 
@@ -52,11 +61,21 @@ class Turtle {
     }
 
     rt(deg) {
+        if (this.isDrawingSmooth) {
+            this.commandQueue.push({ type: 'rt', deg });
+            this.processQueue();
+            return;
+        }
         this.angle += (deg * Math.PI) / 180;
         this.draw();
     }
 
     lt(deg) {
+        if (this.isDrawingSmooth) {
+            this.commandQueue.push({ type: 'lt', deg });
+            this.processQueue();
+            return;
+        }
         this.angle -= (deg * Math.PI) / 180;
         this.draw();
     }
@@ -171,6 +190,80 @@ class Turtle {
         this.fontName = style;
     }
 
+    polygon(sides, size) {
+        const angle = 360 / sides;
+        for (let i = 0; i < sides; i++) {
+            this.fd(size);
+            this.rt(angle);
+        }
+    }
+
+    star(points, outerRadius, innerRadius) {
+        let angle = Math.PI / points;
+        this.ctx.beginPath();
+        for (let i = 0; i < 2 * points; i++) {
+            let r = (i % 2 === 0) ? outerRadius : innerRadius;
+            let currX = this.x + r * Math.cos(this.angle + i * angle);
+            let currY = this.y + r * Math.sin(this.angle + i * angle);
+            if (i === 0) this.ctx.moveTo(currX, currY);
+            else this.ctx.lineTo(currX, currY);
+        }
+        this.ctx.closePath();
+        this.ctx.strokeStyle = this.color;
+        this.ctx.lineWidth = this.width;
+        this.ctx.stroke();
+    }
+
+    stamp() {
+        this.drawOnCanvas(this.ctx);
+    }
+
+    drawOnCanvas(targetCtx) {
+        targetCtx.save();
+        targetCtx.translate(this.x, this.y);
+        targetCtx.rotate(this.angle + Math.PI / 2);
+        if (this.turtleImage) {
+            const size = 30;
+            targetCtx.drawImage(this.turtleImage, -size/2, -size/2, size, size);
+        } else {
+            targetCtx.beginPath();
+            targetCtx.moveTo(0, -10);
+            targetCtx.lineTo(7, 10);
+            targetCtx.lineTo(-7, 10);
+            targetCtx.closePath();
+            targetCtx.fillStyle = 'green';
+            targetCtx.fill();
+            targetCtx.strokeStyle = 'black';
+            targetCtx.lineWidth = 1;
+            targetCtx.stroke();
+        }
+        targetCtx.restore();
+    }
+
+    drawImage(url, w, h) {
+        const img = new Image();
+        img.onload = () => {
+            this.ctx.drawImage(img, this.x - w/2, this.y - h/2, w, h);
+            this.draw();
+        };
+        img.src = url;
+    }
+
+    gradient(type, colors) {
+        let grd;
+        if (type === 'linear') {
+            grd = this.ctx.createLinearGradient(0, 0, this.canvas.width, this.canvas.height);
+        } else {
+            grd = this.ctx.createRadialGradient(this.x, this.y, 5, this.x, this.y, 100);
+        }
+        colors.forEach((c, i) => grd.addColorStop(i / (colors.length - 1), c));
+        this.color = grd;
+    }
+
+    opacity(value) {
+        this.ctx.globalAlpha = value;
+    }
+
     setTurtleImage(url) {
         if (!url) {
             this.turtleImage = null;
@@ -269,6 +362,81 @@ class Turtle {
         }
 
         this.turtleCtx.restore();
+    }
+
+    async processQueue() {
+        if (this.isProcessing) return;
+        this.isProcessing = true;
+
+        while (this.commandQueue.length > 0) {
+            const cmd = this.commandQueue.shift();
+            if (cmd.type === 'fd') {
+                await this.animateFd(cmd.dist);
+            } else if (cmd.type === 'rt') {
+                await this.animateRotate(cmd.deg);
+            } else if (cmd.type === 'lt') {
+                await this.animateRotate(-cmd.deg);
+            }
+        }
+
+        this.isProcessing = false;
+    }
+
+    animateFd(dist) {
+        return new Promise(resolve => {
+            const steps = Math.max(1, Math.abs(dist) / (this.speed / 60));
+            const stepX = (dist * Math.cos(this.angle)) / steps;
+            const stepY = (dist * Math.sin(this.angle)) / steps;
+            let currentStep = 0;
+
+            const animate = () => {
+                if (currentStep < steps) {
+                    const newX = this.x + stepX;
+                    const newY = this.y + stepY;
+                    if (this.penDown) {
+                        this.ctx.strokeStyle = this.color;
+                        this.ctx.lineWidth = this.width;
+                        this.ctx.lineTo(newX, newY);
+                        this.ctx.stroke();
+                    } else {
+                        this.ctx.moveTo(newX, newY);
+                    }
+                    this.x = newX;
+                    this.y = newY;
+                    this.draw();
+                    currentStep++;
+                    requestAnimationFrame(animate);
+                } else {
+                    resolve();
+                }
+            };
+            animate();
+        });
+    }
+
+    animateRotate(deg) {
+        return new Promise(resolve => {
+            const rad = (deg * Math.PI) / 180;
+            const steps = Math.max(1, Math.abs(deg) / 5);
+            const stepRad = rad / steps;
+            let currentStep = 0;
+
+            const animate = () => {
+                if (currentStep < steps) {
+                    this.angle += stepRad;
+                    this.draw();
+                    currentStep++;
+                    requestAnimationFrame(animate);
+                } else {
+                    resolve();
+                }
+            };
+            animate();
+        });
+    }
+
+    smooth(active) {
+        this.isDrawingSmooth = active !== false;
     }
 
     // Alias for common Logo commands

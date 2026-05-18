@@ -8,6 +8,7 @@ function updateHighlight() {
     const commands = [
         "fd", "bk", "rt", "lt", "pu", "pd", "cs", "clean", "home", "setcolor", "setwidth", "ps",
         "arc", "circle", "e", "rectangle", "ellipse", "line", "write", "font",
+        "polygon", "star", "stamp", "drawimage", "gradient", "opacity", "smooth",
         "setxy", "setheading", "ht", "st", "posx", "posy", "heading", "distance", "towards",
         "ds", "nce", "ng", "pencolor", "pc", "fillcolor", "fill", "canvascolor",
         "sin", "cos", "tan", "atan", "pi", "sqrt", "pow", "abs", "exp", "ln", "random", "m",
@@ -88,6 +89,7 @@ function runCode() {
     const helpers = {
         fd, bk, rt, lt, pu, pd, cs, clean, home, setcolor, setwidth, ps,
         arc, circle, e, rectangle, ellipse, line, write, font,
+        polygon, star, stamp, drawimage, gradient, opacity, smooth,
         setxy, setheading, ht, st, posx, posy, heading, distance, towards,
         ds, nce, ng,
         pencolor, pc, fillcolor, fill, canvascolor,
