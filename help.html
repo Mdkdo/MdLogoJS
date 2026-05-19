@@ -118,18 +118,18 @@
                 <div class="card">
                     <table>
                         <thead>
-                            <tr><th>Commande</th><th>Description</th></tr>
+                            <tr><th>Commande</th><th>Description</th><th>Alias FR</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td><code>fd(n)</code></td><td>Avance de n pas. Alias: <code>forward</code></td></tr>
-                            <tr><td><code>bk(n)</code></td><td>Recule de n pas. Alias: <code>back</code></td></tr>
-                            <tr><td><code>rt(deg)</code></td><td>Tourne à droite de n degrés. Alias: <code>right</code></td></tr>
-                            <tr><td><code>lt(deg)</code></td><td>Tourne à gauche de n degrés. Alias: <code>left</code></td></tr>
-                            <tr><td><code>setxy(x, y)</code></td><td>Déplace la tortue aux coordonnées (x,y). (0,0) est le centre.</td></tr>
-                            <tr><td><code>setheading(deg)</code></td><td>Oriente la tortue. 0 est le haut.</td></tr>
-                            <tr><td><code>home()</code></td><td>Ramène la tortue au centre (0,0).</td></tr>
-                            <tr><td><code>cs()</code></td><td>Efface tout et ramène la tortue au centre. Alias: <code>clearscreen</code></td></tr>
-                            <tr><td><code>clean()</code></td><td>Efface le dessin sans bouger la tortue.</td></tr>
+                            <tr><td><code>fd(n)</code></td><td>Avance de n pas.</td><td><code>av(n)</code></td></tr>
+                            <tr><td><code>bk(n)</code></td><td>Recule de n pas.</td><td><code>re(n)</code></td></tr>
+                            <tr><td><code>rt(deg)</code></td><td>Tourne à droite.</td><td><code>td(deg)</code></td></tr>
+                            <tr><td><code>lt(deg)</code></td><td>Tourne à gauche.</td><td><code>tg(deg)</code></td></tr>
+                            <tr><td><code>setxy(x, y)</code></td><td>Déplace la tortue.</td><td><code>fpos(x, y)</code></td></tr>
+                            <tr><td><code>setheading(deg)</code></td><td>Oriente la tortue.</td><td><code>fcap(deg)</code></td></tr>
+                            <tr><td><code>home()</code></td><td>Ramène la tortue au centre.</td><td></td></tr>
+                            <tr><td><code>cs()</code></td><td>Efface tout.</td><td><code>ve()</code></td></tr>
+                            <tr><td><code>clean()</code></td><td>Efface le dessin.</td><td></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -140,17 +140,17 @@
                 <div class="card">
                     <table>
                         <thead>
-                            <tr><th>Commande</th><th>Description</th></tr>
+                            <tr><th>Commande</th><th>Description</th><th>Alias FR</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td><code>pu()</code></td><td>Lève le stylo. Alias: <code>penup</code></td></tr>
-                            <tr><td><code>pd()</code></td><td>Abaisse le stylo. Alias: <code>pendown</code></td></tr>
-                            <tr><td><code>setcolor(c)</code></td><td>Change la couleur du stylo (ex: 'red', '#ff0000', 'rouge'). Alias: <code>pencolor</code>, <code>pc</code></td></tr>
-                            <tr><td><code>setwidth(n)</code></td><td>Change l'épaisseur du stylo. Alias: <code>ps</code></td></tr>
-                            <tr><td><code>fillcolor(c)</code></td><td>Définit la couleur de remplissage.</td></tr>
-                            <tr><td><code>fill()</code></td><td>Remplit la dernière forme tracée avec la couleur de remplissage.</td></tr>
-                            <tr><td><code>canvascolor(c)</code></td><td>Change la couleur de fond du canevas.</td></tr>
-                            <tr><td><code>opacity(n)</code></td><td>Définit l'opacité globale (0.0 à 1.0).</td></tr>
+                            <tr><td><code>pu()</code></td><td>Lève le stylo.</td><td><code>lc()</code></td></tr>
+                            <tr><td><code>pd()</code></td><td>Abaisse le stylo.</td><td><code>bc()</code></td></tr>
+                            <tr><td><code>setcolor(c)</code></td><td>Couleur du stylo.</td><td><code>fcc(c)</code></td></tr>
+                            <tr><td><code>setwidth(n)</code></td><td>Épaisseur du stylo.</td><td><code>fixetaille(n)</code></td></tr>
+                            <tr><td><code>fillcolor(c)</code></td><td>Couleur remplissage.</td><td><code>fcl(c)</code></td></tr>
+                            <tr><td><code>fill()</code></td><td>Remplit la forme.</td><td></td></tr>
+                            <tr><td><code>canvascolor(c)</code></td><td>Couleur du canevas.</td><td><code>fct(c)</code></td></tr>
+                            <tr><td><code>opacity(n)</code></td><td>Opacité globale.</td><td><code>opacité(n)</code></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -161,17 +161,17 @@
                 <div class="card">
                     <table>
                         <thead>
-                            <tr><th>Commande</th><th>Description</th></tr>
+                            <tr><th>Commande</th><th>Description</th><th>Alias FR</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td><code>circle(r)</code></td><td>Trace un cercle de rayon r. Alias: <code>e</code></td></tr>
-                            <tr><td><code>arc(deg, r)</code></td><td>Trace un arc de cercle.</td></tr>
-                            <tr><td><code>rectangle(w, h)</code></td><td>Trace un rectangle.</td></tr>
-                            <tr><td><code>ellipse(w, h)</code></td><td>Trace une ellipse.</td></tr>
-                            <tr><td><code>polygon(côtés, taille)</code></td><td>Trace un polygone régulier.</td></tr>
-                            <tr><td><code>star(points, r1, r2)</code></td><td>Trace une étoile à n branches.</td></tr>
-                            <tr><td><code>line(x1, y1, x2, y2)</code></td><td>Trace une ligne entre deux points.</td></tr>
-                            <tr><td><code>stamp()</code></td><td>Laisse une empreinte de la tortue sur le canevas.</td></tr>
+                            <tr><td><code>circle(r)</code></td><td>Trace un cercle.</td><td><code>cercle(r)</code></td></tr>
+                            <tr><td><code>arc(deg, r)</code></td><td>Trace un arc.</td><td></td></tr>
+                            <tr><td><code>rectangle(w, h)</code></td><td>Trace un rectangle.</td><td></td></tr>
+                            <tr><td><code>ellipse(w, h)</code></td><td>Trace une ellipse.</td><td></td></tr>
+                            <tr><td><code>polygon(c, t)</code></td><td>Trace un polygone.</td><td><code>polygone(c, t)</code></td></tr>
+                            <tr><td><code>star(p, r1, r2)</code></td><td>Trace une étoile.</td><td><code>étoile(p, r1, r2)</code></td></tr>
+                            <tr><td><code>line(x1, y1, x2, y2)</code></td><td>Trace une ligne.</td><td></td></tr>
+                            <tr><td><code>stamp()</code></td><td>Empreinte tortue.</td><td><code>tampon()</code></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -296,20 +296,20 @@ f.dessine();</div>
                 <div class="card">
                     <table>
                         <thead>
-                            <tr><th>Commande</th><th>Description</th></tr>
+                            <tr><th>Commande</th><th>Description</th><th>Alias FR</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td><code>smooth(true/false)</code></td><td>Active/Désactive l'animation fluide.</td></tr>
-                            <tr><td><code>gradient(type, c1, c2, ...)</code></td><td>Dégradé ('linear' ou 'radial').</td></tr>
-                            <tr><td><code>repeat(n, (i) => { ... })</code></td><td>Boucle de répétition simplifiée.</td></tr>
-                            <tr><td><code>console.log(...)</code></td><td>Affiche des messages dans le terminal. Alias: <code>print</code></td></tr>
+                            <tr><td><code>smooth(bool)</code></td><td>Animation fluide.</td><td><code>fluide(bool)</code></td></tr>
+                            <tr><td><code>gradient(t, ...)</code></td><td>Dégradé.</td><td><code>dégradé(t, ...)</code></td></tr>
+                            <tr><td><code>repeat(n, fn)</code></td><td>Boucle simplifiée.</td><td><code>répète(n, fn)</code></td></tr>
+                            <tr><td><code>console.log(...)</code></td><td>Terminal.</td><td><code>print</code></td></tr>
                         </tbody>
                     </table>
                     <p>Exemple de boucle complexe :</p>
-                    <div class="example">repeat(36, (i) => {
-  setcolor(rgb(i*7, 100, 255));
-  polygon(6, 50);
-  rt(10);
+                    <div class="example">répète(36, (i) => {
+  fcc(rgb(i*7, 100, 255));
+  polygone(6, 50);
+  td(10);
 });</div>
                 </div>
             </section>

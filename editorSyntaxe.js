@@ -14,7 +14,10 @@ function updateHighlight() {
         "ds", "nce", "ng", "pencolor", "pc", "fillcolor", "fill", "canvascolor",
         "sin", "cos", "tan", "atan", "pi", "sqrt", "pow", "abs", "exp", "ln", "random", "m",
         "integer", "round", "ceil", "mod", "modulo", "o", "min", "max", "rgb",
-        "playsound", "showimage", "showvideo", "repeat"
+        "playsound", "showimage", "showvideo", "repeat",
+        "av", "re", "td", "tg", "lc", "bc", "ve", "ct", "mt", "fcc", "fcl", "fcap", "fpos", "fct",
+        "répète", "écris", "tampon", "dégradé", "opacité", "fluide", "joue",
+        "afficheImage", "afficheVideo", "cercle", "polygone", "étoile"
     ];
 
     const combinedRegex = new RegExp(
@@ -79,6 +82,9 @@ const helpers = {
     sin, cos, tan, atan, pi, sqrt, pow, abs, exp, ln, random, m,
     integer, round, ceil, mod, modulo, o, min, max, rgb,
     playsound, showimage, showvideo, repeat,
+    av, re, td, tg, lc, bc, ve, ct, mt, fcc, fcl, fcap, fpos, fct,
+    répète, écris, tampon, dégradé, opacité, fluide, joue,
+    afficheImage, afficheVideo, cercle, polygone, étoile,
     console: {
         log: (...args) => logToTerminal(args.join(' '), 'log'),
         error: (...args) => logToTerminal(args.join(' '), 'error'),

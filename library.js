@@ -66,6 +66,34 @@ const repeat = (n, fn) => {
     }
 };
 
+// French Aliases
+const av = fd;
+const re = bk;
+const td = rt;
+const tg = lt;
+const lc = pu;
+const bc = pd;
+const ve = cs;
+const ct = ht;
+const mt = st;
+const fcc = setcolor;
+const fcl = fillcolor;
+const fcap = setheading;
+const fpos = setxy;
+const fct = canvascolor;
+const répète = repeat;
+const écris = write;
+const tampon = stamp;
+const dégradé = gradient;
+const opacité = opacity;
+const fluide = smooth;
+const joue = playsound;
+const afficheImage = showimage;
+const afficheVideo = showvideo;
+const cercle = circle;
+const polygone = polygon;
+const étoile = star;
+
 // Media functions
 const playsound = (url) => {
     const audio = new Audio(url);
